@@ -32,7 +32,7 @@ const Navbar = () => {
             alt="Ganza-Inema Fair Trade Logo" 
             className="h-10 w-10 md:h-12 md:w-12 object-contain"
           />
-          <h1 className="text-orange-600 text-2xl md:text-3xl font-bold tracking-tight">
+          <h1 className="text-orange-600 text-xl md:text-3xl font-bold tracking-tight">
             Ganza-Inema <span className="text-orange-800">Fair Trade</span>
           </h1>
         </div>

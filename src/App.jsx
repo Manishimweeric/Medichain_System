@@ -7,7 +7,7 @@ import Contactus from './Pages/Contactus';
 import EventDetails from './Pages/EventDetail';
 import MoreBlogs from './Pages/MoreBlogs';
 import Gallery from './Pages/Gallery';
-import Aboutus from './Pages/Aboutus';
+import Aboutus from './Pages/aboutus';
 import Donate from './Pages/Donate';
 
 

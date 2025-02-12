@@ -51,7 +51,7 @@ export default function HomePage() {
             <img
               src="/images/image2.avif"
               alt="Community"
-              className="w-full h-[500px] md:h-[600px] lg:h-[800px] object-cover brightness-75"
+              className="w-full h-[500px] md:h-[600px] lg:h-[700px] object-cover brightness-75"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-orange-700 to-transparent text-white p-6 sm:p-8 md:p-12 w-full sm:w-3/4 md:w-1/2 flex flex-col justify-center space-y-4">
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight">

@@ -6,9 +6,9 @@ import { FaPinterest } from 'react-icons/fa';
 const Footer = () => {
   const quickLinks = [
     { title: 'Home', href: '/' },
-    { title: 'About Us', href: '#' },
-    { title: 'Blog Post', href: '#' },
-    { title: 'Photo Gallery', href: '#' },
+    { title: 'About Us', href: '/Aboutus' },
+    { title: 'Blog Post', href: '/Blogs' },
+    { title: 'Photo Gallery', href: '/Gallery' },
     { title: 'Events', href: '/EventDetails' }
   ];
 
@@ -67,20 +67,23 @@ const Footer = () => {
 
           {/* Newsletter */}
           <div>
-            <h4 className="text-lg font-semibold mb-4">Newsletter</h4>
-            <div className="flex">
-              <input
-                type="email"
-                placeholder="Enter Your Email"
-                className="flex-1 px-4 py-2 rounded-l text-gray-800 focus:outline-none"
-              />
-              <button className="bg-green-600 px-4 py-2 rounded-r hover:bg-green-700 transition-colors">
-                Subscribe
-              </button>
-            </div>
-            <p className="text-sm mt-2 opacity-80">
-              Your email is safe with us,we don't spam.
-            </p>
+          <h4 className="text-lg font-semibold mb-4">Newsletter</h4>
+<div className="flex flex-wrap sm:flex-nowrap w-full gap-2">
+  <input
+    type="email"
+    placeholder="Enter Your Email"
+    className="w-full sm:flex-1 px-4 py-2 rounded text-gray-800 focus:outline-none border border-gray-300"
+  />
+  <button className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 transition-colors w-full sm:w-auto">
+    Subscribe
+  </button>
+</div>
+<p className="text-sm mt-2 opacity-80">
+  Your email is safe with us, we don't spam.
+</p>
+
+
+            
 
             {/* Social Links */}
             <div className="mt-6">

@@ -47,7 +47,7 @@ const EventDetails = () => {
 
     ];
     return (
-        <div className="bg-orange-100 mt-32">
+        <div className="bg-orange-100 mt-28 md:mt-32">
             {/* Header Section */}
             <div className="bg-gradient-to-r from-orange-200 to-orange-600  py-20">
                 <h1 className="text-3xl font-bold text-center mb-6">

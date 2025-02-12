@@ -7,7 +7,7 @@ const DonationPage = () => {
   const closeModal = () => setIsModalOpen(false);
 
   return (
-    <div className="min-h-screen mt-32 bg-white">
+    <div className="min-h-screen mt-28 md:mt-32 bg-white">
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-orange-200 to-orange-600  py-16 px-4 md:px-8">
         <div className="max-w-7xl mx-auto grid md:grid-cols-2 gap-8 items-center">

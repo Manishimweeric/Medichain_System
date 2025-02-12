@@ -3,7 +3,7 @@ import { Facebook, Twitter, Linkedin } from 'lucide-react';
 
 const Contactus = () => {
   return (
-    <div className="bg-orange-100 mt-32 py-16">
+    <div className="bg-orange-100 mt-28 md:mt-32 py-16">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
           {/* Left Column */}

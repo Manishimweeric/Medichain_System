@@ -45,29 +45,39 @@ export default function HomePage() {
 
 
   return (
-    <div className="font-sans">
-      <div className="relative">
-        <img src="/images/image2.avif" alt="Community" className="w-full h-[700px] object-cover brightness-75"/>
-        <div className="absolute top-0 left-0 bg-gradient-to-r from-orange-700 to-transparent text-white p-8 w-1/2 h-full flex flex-col justify-center space-y-4">
-          <h2 className="text-4xl font-bold leading-tight">Empowering Communities, Transforming Lives</h2>
-          <p className="mt-2 text-lg">
-            We believe in transforming lives through financial empowerment.
-          </p>
-          <div className="mt-6 space-x-4">
-            <button 
-            className="bg-orange-600 text-white px-6 py-3 rounded-full hover:bg-orange-700 transition duration-300">
-              Donate Now
-            </button>
-            <Link 
-            to="/about"
-            className="bg-white text-orange-600 px-6 py-3 rounded-full border-2 border-orange-600 hover:bg-orange-100 transition duration-300"
-          >
-            Know About Us
-          </Link>
+    <div className="font-sans mt-28">
+
+          <div className="relative">
+            <img
+              src="/images/image2.avif"
+              alt="Community"
+              className="w-full h-[500px] md:h-[600px] lg:h-[800px] object-cover brightness-75"
+            />
+            <div className="absolute inset-0 bg-gradient-to-r from-orange-700 to-transparent text-white p-6 sm:p-8 md:p-12 w-full sm:w-3/4 md:w-1/2 flex flex-col justify-center space-y-4">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight">
+                Empowering Communities, Transforming Lives
+              </h2>
+              <p className="mt-2 text-sm sm:text-lg">
+                We believe in transforming lives through financial empowerment.
+              </p>
+              <div className="mt-4 sm:mt-6 flex flex-col sm:flex-row sm:space-x-4 space-y-3 sm:space-y-0">
+                <Link
+                  to="/donate"
+                  className="bg-orange-600 text-white px-6 py-3 rounded-full hover:bg-orange-700 transition duration-300 text-center"
+                >
+                  Donate Now
+                </Link>
+                <Link
+                  to="/about"
+                  className="bg-white text-orange-600 px-6 py-3 rounded-full border-2 border-orange-600 hover:bg-orange-100 transition duration-300 text-center"
+                >
+                  Know About Us
+                </Link>
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 p-8">
+
+      <div className="grid grid-cols- md:grid-cols-4 gap-6 p-8">
         {[
           { icon: "💚", label: "Featured" },
           { icon: "📈", label: "Financial Empowerment" },
@@ -85,7 +95,7 @@ export default function HomePage() {
 
 
       {/* About Us Section */}
-      <div className="container mt-48 mx-auto px-4 py-16" id="aboutus">
+      <div className="container md:mt-48 mx-auto px-4 py-16">
         <div className="flex flex-col lg:flex-row items-center gap-8">
           {/* Images Section */}
           <div className="relative w-full lg:w-1/2">
@@ -130,7 +140,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="container mx-auto mt-60 px-4 py-16">
+      <div className="container mx-auto md:mt-60 px-4 py-16">
         <div className="flex flex-col lg:flex-row items-center gap-12">
           {/* Left Content Section */}
           <div className="w-full lg:w-1/2">

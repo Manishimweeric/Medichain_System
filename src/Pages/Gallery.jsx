@@ -93,7 +93,7 @@ const GalleryPage = () => {
 
 
     return (
-        <div className="min-h-screen mt-32 bg-gray-100">
+        <div className="min-h-screen mt-28 md:mt-32 bg-gray-100">
           {/* Hero Section */}
           <div className="bg-gradient-to-r from-orange-200 to-orange-600 py-20">
             <div className="container mx-auto px-4">

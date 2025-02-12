@@ -47,7 +47,7 @@ const MoreBlogs = () => {
   const tags = ["Food", "Medical", "Home", "Lifestyle", "Education", "Water"];
 
   return (
-    <div className='mt-32'>
+    <div className='mt-28 md:mt-32'>
    
    <div className="bg-gradient-to-r from-orange-200 to-orange-600 py-20">
   <div className="container mx-auto px-4">

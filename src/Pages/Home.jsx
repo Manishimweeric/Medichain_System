@@ -5,6 +5,7 @@ import Events from "../Pages/Components/Events";
 import Blogs from "../Pages/Components/blogs";
 import Feature from "../Pages/Components/Feature";
 import ScrollToTop from '../Pages/Components/ScrollToTop'; 
+import ImageSlider from '../Pages/Components/ImageSlider'; 
 import { Link } from 'react-router-dom';
 
 export default function HomePage() {
@@ -48,11 +49,9 @@ export default function HomePage() {
     <div className="font-sans mt-28">
 
           <div className="relative">
-            <img
-              src="/images/image2.avif"
-              alt="Community"
-              className="w-full h-[500px] md:h-[600px] lg:h-[700px] object-cover brightness-75"
-            />
+           
+            <ImageSlider />
+
             <div className="absolute inset-0 bg-gradient-to-r from-orange-700 to-transparent text-white p-6 sm:p-8 md:p-12 w-full sm:w-3/4 md:w-1/2 flex flex-col justify-center space-y-4">
               <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold leading-tight">
                 Empowering Communities, Transforming Lives
@@ -129,8 +128,7 @@ export default function HomePage() {
               </div>
 
               <p className="text-gray-600 leading-relaxed">
-                At The Hands Of Change, We Empower Individuals And Communities Through Financial Education, Savings Groups, And Support. Driven By The Belief That Everyone Deserves Financial Independence, We Create Pathways For Growth, Resilience, And Lasting Impact.
-              </p>
+               GIfT is a private organization registered by Rwanda Development Board as a Community Benefit Company. Created in 2024, it is located in Kicukiro District, Kanombe Sector. Business oriented, its benefits are used for the community development.   </p>
 
               <button className="bg-orange-600  text-white px-6 py-3 rounded hover:bg-orange-600 transition-colors">
                 Read More
@@ -152,9 +150,7 @@ export default function HomePage() {
             </h1>
 
             <p className="text-gray-600 mb-8">
-              Lorem Ipsum Dolor Sit Amet, Consetetur Sadipscing Elitr, Sed Diam
-              Nonumy Tempor Invidunt Ut Labore Et Dolore Magna Aliquyam
-              Erat, Sed Diam Voluptua. At Vero Eos Et Accusam Et Justo.
+            GIfT is a private organization registered by Rwanda Development Board as a Community Benefit Company. Created in 2024, it is located in Kicukiro District, Kanombe Sector. Business oriented, its benefits are used for the community development.
             </p>
 
             {/* Mission and Vision Cards */}
@@ -165,7 +161,7 @@ export default function HomePage() {
                   <span className="font-semibold text-orange-600">Our Mission</span>
                 </div>
                 <p className="text-gray-600">
-                  Lorem Ipsum Dolor Sit Amet, Consetetur Sadipscing Elitr, Sed Diam
+                Lifting people from poverty through trainings on savings and loans, entrepreneurship, gender equality and provision of seed money.
                 </p>
               </div>
 
@@ -175,7 +171,7 @@ export default function HomePage() {
                   <span className="font-semibold text-orange-600">Our Vision</span>
                 </div>
                 <p className="text-gray-600">
-                  Lorem Ipsum Dolor Sit Amet, Consetetur Sadipscing Elitr, Sed Diam
+                  Satisfying socio-economic development of the poorest in the community.
                 </p>
               </div>
             </div>

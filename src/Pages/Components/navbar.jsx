@@ -26,9 +26,16 @@ const Navbar = () => {
 
       {/* Fixed Navbar */}
       <nav className="fixed top-12 left-0 w-full bg-white shadow-lg px-6 py-4 z-50 flex justify-between items-center">
-        <h1 className="text-orange-600 text-2xl md:text-3xl font-bold tracking-tight">
-          Hands <span className="text-orange-800">Of Change</span>
-        </h1>
+        <div className="flex items-center space-x-3">
+          <img 
+            src="/images/gift.jpg"  // Replace with your actual logo path
+            alt="Ganza-Inema Fair Trade Logo" 
+            className="h-10 w-10 md:h-12 md:w-12 object-contain"
+          />
+          <h1 className="text-orange-600 text-2xl md:text-3xl font-bold tracking-tight">
+            Ganza-Inema <span className="text-orange-800">Fair Trade</span>
+          </h1>
+        </div>
 
         {/* Hamburger Menu for Mobile */}
         <div className="md:hidden">

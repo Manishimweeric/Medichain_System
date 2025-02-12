@@ -66,12 +66,10 @@ const Aboutus = () => {
                             </div>
 
                             <p className="text-gray-600 leading-relaxed">
-                                At The Hands Of Change, We Empower Individuals And Communities Through Financial Education, Savings Groups, And Support. Driven By The Belief That Everyone Deserves Financial Independence, We Create Pathways For Growth, Resilience, And Lasting Impact.
+                            GIfT is a private organization registered by Rwanda Development Board as a Community Benefit Company. Created in 2024, it is located in Kicukiro District, Kanombe Sector. Business oriented, its benefits are used for the community development.
                             </p>
 
-                            <button className="bg-orange-600  text-white px-6 py-3 rounded hover:bg-orange-600 transition-colors">
-                                Read More
-                            </button>
+                            
                         </div>
                     </div>
                 </div>
@@ -90,52 +88,52 @@ const Aboutus = () => {
                         </h1>
 
                         <p className="text-gray-600 mb-8">
-                            Lorem Ipsum Dolor Sit Amet, Consetetur Sadipscing Elitr, Sed Diam
-                            Nonumy Tempor Invidunt Ut Labore Et Dolore Magna Aliquyam
-                            Erat, Sed Diam Voluptua. At Vero Eos Et Accusam Et Justo.
+                        GIfT is a private organization registered by Rwanda Development Board as a Community Benefit Company. Created in 2024, it is located in Kicukiro District, Kanombe Sector. Business oriented, its benefits are used for the community development.
+          
                         </p>
 
                         {/* Mission and Vision Cards */}
                         <div className="flex flex-col md:flex-row gap-6 mb-8">
                             <div className="bg-teal-50 p-6 rounded-lg flex-1">
-                                <div className="flex items-center gap-2 mb-3">
-                                    <Shield className="text-purple-700" size={24} />
-                                    <span className="font-semibold text-purple-700">Our Mission</span>
-                                </div>
-                                <p className="text-gray-600">
-                                    Lorem Ipsum Dolor Sit Amet, Consetetur Sadipscing Elitr, Sed Diam
-                                </p>
+                            <div className="flex items-center gap-2 mb-3">
+                                <Shield className="text-orange-600" size={24} />
+                                <span className="font-semibold text-orange-600">Our Mission</span>
+                            </div>
+                            <p className="text-gray-600">
+                            Lifting people from poverty through trainings on savings and loans, entrepreneurship, gender equality and provision of seed money.
+                            </p>
                             </div>
 
                             <div className="bg-teal-50 p-6 rounded-lg flex-1">
-                                <div className="flex items-center gap-2 mb-3">
-                                    <Eye className="text-purple-700" size={24} />
-                                    <span className="font-semibold text-purple-700">Our Vision</span>
-                                </div>
-                                <p className="text-gray-600">
-                                    Lorem Ipsum Dolor Sit Amet, Consetetur Sadipscing Elitr, Sed Diam
-                                </p>
+                            <div className="flex items-center gap-2 mb-3">
+                                <Eye className="text-orange-600" size={24} />
+                                <span className="font-semibold text-orange-600">Our Vision</span>
+                            </div>
+                            <p className="text-gray-600">
+                                Satisfying socio-economic development of the poorest in the community.
+                            </p>
                             </div>
                         </div>
 
                         {/* Progress Bars */}
                         <div className="space-y-4">
                             {progressData.map((item, index) => (
-                                <div key={index}>
-                                    <div className="flex justify-between mb-2">
-                                        <span className="font-medium">{item.label}</span>
-                                        <span className="text-purple-700">{item.percentage}%</span>
-                                    </div>
-                                    <div className="h-3 bg-teal-50 rounded-full">
-                                        <div
-                                            className="h-full bg-purple-700 rounded-full transition-all duration-500"
-                                            style={{ width: `${item.percentage}%` }}
-                                        />
-                                    </div>
+                            <div key={index}>
+                                <div className="flex justify-between mb-2">
+                                <span className="font-medium">{item.label}</span>
+                                <span className="text-orange-600">{item.percentage}%</span>
                                 </div>
+                                <div className="h-3 bg-teal-50 rounded-full">
+                                <div
+                                    className="h-full bg-gradient-to-r from-orange-200 to-orange-600 rounded-full transition-all duration-500"
+                                    style={{ width: `${item.percentage}%` }}
+                                />
+                                </div>
+                            </div>
                             ))}
                         </div>
-                    </div>
+                        </div>
+
 
                     <div className="w-full lg:w-1/2 relative">
                         <div className="bg-teal-50 p-4 w-[80%] rounded-lg">
@@ -150,7 +148,7 @@ const Aboutus = () => {
                             <ul className="space-y-3">
                                 {objectives.map((objective, index) => (
                                     <li key={index} className="flex items-center gap-2">
-                                        <span className="w-2 h-2 bg-purple-700 rounded-full"></span>
+                                        <span className="w-2 h-2 bg-orange-600 rounded-full"></span>
                                         <span className="text-sm text-gray-800">{objective}</span>
                                     </li>
                                 ))}

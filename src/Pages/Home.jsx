@@ -4,6 +4,7 @@ import "@fortawesome/fontawesome-free/css/all.min.css";
 import Events from "../Pages/Components/Events";
 import Blogs from "../Pages/Components/blogs";
 import Feature from "../Pages/Components/Feature";
+import ScrollToTop from '../Pages/Components/ScrollToTop'; 
 import { Link } from 'react-router-dom';
 
 export default function HomePage() {
@@ -251,6 +252,7 @@ export default function HomePage() {
 
       <Events />
 
+      <ScrollToTop />  
     </div>
   );
 }

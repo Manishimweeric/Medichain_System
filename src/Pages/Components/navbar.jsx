@@ -9,6 +9,10 @@ const Navbar = () => {
     setIsOpen(!isOpen);
   };
 
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
+
   return (
     <div className="h-auto flex flex-col">
       {/* Fixed Support Banner */}
@@ -28,7 +32,7 @@ const Navbar = () => {
       <nav className="fixed top-12 left-0 w-full bg-white shadow-lg px-2 md:px-6 py-4 z-50 flex justify-between items-center">
         <div className="flex items-center space-x-3">
           <img 
-            src="/images/gift.jpg"  // Replace with your actual logo path
+            src="/images/gift.jpg"
             alt="Ganza-Inema Fair Trade Logo" 
             className="h-10 w-10 md:h-12 md:w-12 object-contain"
           />
@@ -60,6 +64,7 @@ const Navbar = () => {
               <NavLink
                 to={item.to}
                 className={({ isActive }) => isActive ? "text-orange-600 font-bold" : "hover:text-orange-600"}
+                onClick={closeMenu} // Close menu on click
               >
                 {item.label}
               </NavLink>

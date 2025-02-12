@@ -32,7 +32,7 @@ const Aboutus = () => {
             </div>
 
             {/* About Us Section */}
-            <div className="container mt-48 mx-auto px-4 py-16" id="aboutus">
+            <div className="container md:mt-48 mx-auto px-4 py-16" id="aboutus">
                 <div className="flex flex-col lg:flex-row items-center gap-8">
                     {/* Images Section */}
                     <div className="relative w-full lg:w-1/2">
@@ -76,7 +76,7 @@ const Aboutus = () => {
             </div>
 
 
-            <div className="container mx-auto mt-60 px-4 py-16">
+            <div className="container mx-auto md:mt-60 px-4 py-16">
                 <div className="flex flex-col lg:flex-row items-center gap-12">
                     {/* Left Content Section */}
                     <div className="w-full lg:w-1/2">

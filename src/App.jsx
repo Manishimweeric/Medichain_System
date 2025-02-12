@@ -7,7 +7,7 @@ import Contactus from './Pages/Contactus';
 import EventDetails from './Pages/EventDetail';
 import MoreBlogs from './Pages/MoreBlogs';
 import Gallery from './Pages/Gallery';
-import Aboutus from './Pages/aboutus';
+import About from './Pages/About';
 import Donate from './Pages/Donate';
 
 
@@ -22,7 +22,7 @@ function App() {
         <Route path="/EventDetails" element={<><Navbar/> <EventDetails /> <Footer /> </>} />
         <Route path="/MoreBlogs" element={<><Navbar/> <MoreBlogs /> <Footer /> </>} />
         <Route path="/Gallery" element={<><Navbar/> <Gallery /> <Footer /> </>} />
-        <Route path="/Aboutus" element={<><Navbar/> <Aboutus /> <Footer /> </>} />
+        <Route path="/Aboutus" element={<><Navbar/> <About /> <Footer /> </>} />
         <Route path="/Donate" element={<><Navbar/> <Donate /> <Footer /> </>} />
       </Routes>      
     </Router>

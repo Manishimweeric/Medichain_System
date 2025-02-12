@@ -25,7 +25,7 @@ const Navbar = () => {
       </div>
 
       {/* Fixed Navbar */}
-      <nav className="fixed top-12 left-0 w-full bg-white shadow-lg px-6 py-4 z-50 flex justify-between items-center">
+      <nav className="fixed top-12 left-0 w-full bg-white shadow-lg px-2 md:px-6 py-4 z-50 flex justify-between items-center">
         <div className="flex items-center space-x-3">
           <img 
             src="/images/gift.jpg"  // Replace with your actual logo path

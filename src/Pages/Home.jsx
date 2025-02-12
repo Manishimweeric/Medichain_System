@@ -68,7 +68,7 @@ export default function HomePage() {
                   Donate Now
                 </Link>
                 <Link
-                  to="/about"
+                  to="/Aboutus"
                   className="bg-white text-orange-600 px-6 py-3 rounded-full border-2 border-orange-600 hover:bg-orange-100 transition duration-300 text-center"
                 >
                   Know About Us

@@ -63,7 +63,7 @@ const Navbar = () => {
             onMouseEnter={() => setDropdown("about")}
             onMouseLeave={() => setDropdown(null)}
           >
-            <NavLink to="/Aboutus" className="block">
+            <NavLink to="" className="block">
               About Us
             </NavLink>
             {dropdown === "about" && (
@@ -88,18 +88,18 @@ const Navbar = () => {
             onMouseEnter={() => setDropdown("gallery")}
             onMouseLeave={() => setDropdown(null)}
           >
-            <NavLink to="/Gallery" className="block">
+            <NavLink to="" className="block">
               Gallery
             </NavLink>
             {dropdown === "gallery" && (
               <ul className="absolute bg-white shadow-lg rounded-lg py-2 left-0 w-40 mt-1">
                 <li>
-                  <NavLink to="/Gallery-Video" onClick={closeMenu} className="block px-4 py-2 hover:bg-orange-200">
+                  <NavLink to="/Videos" onClick={closeMenu} className="block px-4 py-2 hover:bg-orange-200">
                     Video
                   </NavLink>
                 </li>
                 <li>
-                  <NavLink to="/Gallery-Photo" onClick={closeMenu} className="block px-4 py-2 hover:bg-orange-200">
+                  <NavLink to="/Gallery" onClick={closeMenu} className="block px-4 py-2 hover:bg-orange-200">
                     Gallery Photo
                   </NavLink>
                 </li>

@@ -24,8 +24,7 @@ const Aboutus = () => {
                 <div className="container mx-auto px-4">
                     <h1 className="text-3xl md:text-5xl font-bold text-center mb-4">About Us</h1>
                     <p className="text-xl text-center max-w-3xl mx-auto">
-                    Discover our commitment to making a lasting impact, empowering individuals and communities.
-
+                        Discover our commitment to making a lasting impact, empowering individuals and communities.
                     </p>
                 </div>
             </div>

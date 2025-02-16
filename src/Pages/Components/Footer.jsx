@@ -102,12 +102,9 @@ const Footer = () => {
             </div>
           </div>
         </div>
-
-        {/* Copyright */}
         <div className="mt-12 pt-8 border-t border-purple-500 text-center">
-          <p>© Ganza-Inema Fair Trade</p>
+          <p>© 2025  Ganza-Inema Fair Trade</p>
         </div>
-
       </div>
     </footer>
   );

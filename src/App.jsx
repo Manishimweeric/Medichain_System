@@ -9,6 +9,9 @@ import MoreBlogs from './Pages/MoreBlogs';
 import Gallery from './Pages/Gallery';
 import About from './Pages/About';
 import Donate from './Pages/Donate';
+import Videos from './Pages/Videos';
+import Vision from './Pages/Vision';
+import Mission from './Pages/Mission';
 
 
 function App() {
@@ -24,6 +27,9 @@ function App() {
         <Route path="/Gallery" element={<><Navbar/> <Gallery /> <Footer /> </>} />
         <Route path="/Aboutus" element={<><Navbar/> <About /> <Footer /> </>} />
         <Route path="/Donate" element={<><Navbar/> <Donate /> <Footer /> </>} />
+        <Route path="/Videos" element={<><Navbar/> <Videos /> <Footer /> </>} />
+        <Route path="/Mission" element={<><Navbar/> <Mission /> <Footer /> </>} />
+        <Route path="/Vision" element={<><Navbar/> <Vision /> <Footer /> </>} />
       </Routes>      
     </Router>
   );

@@ -105,8 +105,9 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="mt-12 pt-8 border-t border-purple-500 text-center">
-          <p>Hands of Change</p>
+          <p>© Ganza-Inema Fair Trade</p>
         </div>
+
       </div>
     </footer>
   );

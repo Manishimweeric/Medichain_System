@@ -2,7 +2,7 @@ import React from 'react';
 import { Shield, Eye } from 'lucide-react';
 
 const Aboutus = () => {
-
+    
     const objectives = [
         "Creating Sustainable Opportunities Together",
         "Collaborate In A Supportive Environment",
@@ -20,7 +20,6 @@ const Aboutus = () => {
 
     return (
         <div className="bg-gray-100 mt-28 md:mt-32  ">
-            {/* Hero Section */}
             <div className="bg-gradient-to-r from-orange-200 to-orange-600 py-20">
                 <div className="container mx-auto px-4">
                     <h1 className="text-3xl md:text-5xl font-bold text-center mb-4">About Us</h1>
@@ -31,12 +30,9 @@ const Aboutus = () => {
                 </div>
             </div>
 
-            {/* About Us Section */}
             <div className="container md:mt-48 mx-auto px-4 py-16" id="aboutus">
                 <div className="flex flex-col lg:flex-row items-center gap-8">
-                    {/* Images Section */}
                     <div className="relative w-full lg:w-1/2">
-                        {/* Top Image */}
                         <div className="bg-teal-50 p-4 rounded-lg mb-4 lg:absolute lg:top-0 lg:right-0 lg:w-3/4">
                             <img
                                 src="/images/image2.avif"
@@ -44,8 +40,6 @@ const Aboutus = () => {
                                 className="w-full h-auto rounded-lg"
                             />
                         </div>
-
-                        {/* Bottom Image */}
                         <div className="bg-teal-50 p-4 rounded-lg lg:absolute lg:bottom-0 lg:left-0 lg:w-3/4">
                             <img
                                 src="/images/images.webp"
@@ -54,8 +48,6 @@ const Aboutus = () => {
                             />
                         </div>
                     </div>
-
-                    {/* Content Section */}
                     <div className="w-full lg:w-1/2 lg:pl-8">
                         <div className="space-y-6">
                             <div>
@@ -67,9 +59,7 @@ const Aboutus = () => {
 
                             <p className="text-gray-600 leading-relaxed">
                             GIfT is a private organization registered by Rwanda Development Board as a Community Benefit Company. Created in 2024, it is located in Kicukiro District, Kanombe Sector. Business oriented, its benefits are used for the community development.
-                            </p>
-
-                            
+                            </p>                            
                         </div>
                     </div>
                 </div>
@@ -78,10 +68,7 @@ const Aboutus = () => {
 
             <div className="container mx-auto md:mt-60 px-4 py-16">
                 <div className="flex flex-col lg:flex-row items-center gap-12">
-                    {/* Left Content Section */}
                     <div className="w-full lg:w-1/2">
-
-
                         <h1 className="text-4xl lg:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                             Let Us Come Together<br />
                             To Make A Difference
@@ -89,10 +76,7 @@ const Aboutus = () => {
 
                         <p className="text-gray-600 mb-8">
                         GIfT is a private organization registered by Rwanda Development Board as a Community Benefit Company. Created in 2024, it is located in Kicukiro District, Kanombe Sector. Business oriented, its benefits are used for the community development.
-          
                         </p>
-
-                        {/* Mission and Vision Cards */}
                         <div className="flex flex-col md:flex-row gap-6 mb-8">
                             <div className="bg-teal-50 p-6 rounded-lg flex-1">
                             <div className="flex items-center gap-2 mb-3">
@@ -115,7 +99,6 @@ const Aboutus = () => {
                             </div>
                         </div>
 
-                        {/* Progress Bars */}
                         <div className="space-y-4">
                             {progressData.map((item, index) => (
                             <div key={index}>
@@ -132,7 +115,7 @@ const Aboutus = () => {
                             </div>
                             ))}
                         </div>
-                        </div>
+                    </div>
 
 
                     <div className="w-full lg:w-1/2 relative">
@@ -157,7 +140,6 @@ const Aboutus = () => {
                     </div>
                 </div>
             </div>
-
         </div>
 
     );

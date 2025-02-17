@@ -1,7 +1,7 @@
 import React from 'react';
 import { MapPin, Calendar } from 'lucide-react';
 import { ArrowRight } from 'lucide-react';
-
+import { useNavigate } from 'react-router-dom';
 const EventCard = ({ day, month, title }) => (
     <div className="bg-gradient-to-r from-orange-200 to-orange-600 rounded-lg p-6 flex items-center justify-between hover:bg-orange-400 transition-colors cursor-pointer">
         <div className="flex items-center space-x-6">
@@ -20,6 +20,10 @@ const EventCard = ({ day, month, title }) => (
     </div>
 );
 const Events = () => {
+    const navigate = useNavigate();
+    const handleReadMore = (id) => {
+      navigate(`/EventDetails/${id}`);
+    };
     const carouselItems = [
         {
             image: "/images/event1.jpg",
@@ -96,10 +100,10 @@ const Events = () => {
                             <div className="bg-white shadow-lg rounded-lg p-6">
                                 <img src={item.image} alt={item.title} className="rounded-lg h-64 w-full object-cover" />
                                 <h3 className="text-lg font-bold mt-4">{item.title}</h3>
-                                <p className="text-gray-600 text-sm mt-2">{item.description}</p>
+                                <p className="text-gray-600 text-sm mt-2">{item.description}</p>                               
                                 <button 
                                     className="mt-4 text-orange-600 font-semibold hover:underline"
-                                    onClick={() => window.location.href = `/EventDetails`}
+                                    onClick={() => handleReadMore(item.id)}
                                 >
                                     Read More
                                 </button>

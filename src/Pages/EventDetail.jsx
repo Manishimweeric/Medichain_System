@@ -1,6 +1,7 @@
 import React from 'react';
 import { MapPin, Calendar } from 'lucide-react';
 import { ArrowRight } from 'lucide-react';
+
 const EventCard = ({ day, month, title }) => (
     <div className="bg-gradient-to-r from-orange-200 to-orange-600 rounded-lg p-6 flex items-center justify-between hover:bg-orange-400 transition-colors cursor-pointer">
         <div className="flex items-center space-x-6">
@@ -20,7 +21,6 @@ const EventCard = ({ day, month, title }) => (
 );
 
 const EventDetails = () => {
-
     const events = [
         {
             day: "13",
@@ -41,9 +41,7 @@ const EventDetails = () => {
             day: "20",
             month: "MAY",
             title: "A  Fixes the Navbar Below the Banner"
-        },
-        
-        
+        },      
 
     ];
     return (

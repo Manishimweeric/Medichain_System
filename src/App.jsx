@@ -24,7 +24,7 @@ function App() {
       <Routes>
         <Route path="/" element={<><Navbar/> <HomePage /> <Footer /> </>} />
         <Route path="/contactus" element={<><Navbar/> <Contactus /> <Footer /> </>} />
-        <Route path="/EventDetails" element={<><Navbar/> <EventDetails /> <Footer /> </>} />
+        <Route path="/EventDetails/:id" element={<><Navbar/> <EventDetails /> <Footer /> </>} />
         <Route path="/MoreBlogs" element={<><Navbar/> <MoreBlogs /> <Footer /> </>} />
         <Route path="/Gallery" element={<><Navbar/> <Gallery /> <Footer /> </>} />
         <Route path="/Aboutus" element={<><Navbar/> <About /> <Footer /> </>} />

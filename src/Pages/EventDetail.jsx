@@ -98,9 +98,9 @@ const EventDetails = () => {
                         </div>
                     </div>
 
-                    <section className="max-w-full mx-auto px-4 py-16">
-                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Recent Events in Next Month</h2>
-                        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+                    <section className="md:px-8 md:py-12 md:mt-0 mt-14 md:max-w-[85%] mx-auto">
+                        <h2 className="text-2xl font-bold text-gray-900 mb-6">Up Camming Events in Next Month</h2>
+                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                             {events.map((event, index) => (
                                 <EventCard key={index} {...event} />
                             ))}

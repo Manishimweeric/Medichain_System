@@ -56,7 +56,6 @@ const Navbar = () => {
               Home
             </NavLink>
           </li>
-
           {/* About Us Dropdown */}
           <li 
             className="relative hover:bg-orange-100 px-4 py-2 rounded-lg transition duration-300"
@@ -81,7 +80,6 @@ const Navbar = () => {
               </ul>
             )}
           </li>
-
           {/* Gallery Dropdown */}
           <li 
             className="relative hover:bg-orange-100 px-4 py-2 rounded-lg transition duration-300"
@@ -109,7 +107,7 @@ const Navbar = () => {
 
           {/* Other Links */}
           <li className="hover:bg-orange-100 px-4 py-2 rounded-lg transition duration-300">
-            <NavLink to="/EventDetails" onClick={closeMenu} className={({ isActive }) => isActive ? "text-orange-600 font-bold" : "hover:text-orange-600"}>
+            <NavLink to="/Events" onClick={closeMenu} className={({ isActive }) => isActive ? "text-orange-600 font-bold" : "hover:text-orange-600"}>
               Events
             </NavLink>
           </li>

@@ -12,6 +12,8 @@ import Donate from './Pages/Donate';
 import Videos from './Pages/Videos';
 import Vision from './Pages/Vision';
 import Mission from './Pages/Mission';
+import Events from './Pages/Events';
+import BlogDetail from './Pages/BlogDetail';
 
 
 function App() {
@@ -30,6 +32,8 @@ function App() {
         <Route path="/Videos" element={<><Navbar/> <Videos /> <Footer /> </>} />
         <Route path="/Mission" element={<><Navbar/> <Mission /> <Footer /> </>} />
         <Route path="/Vision" element={<><Navbar/> <Vision /> <Footer /> </>} />
+        <Route path="/Events" element={<><Navbar/> <Events /> <Footer /> </>} />
+        <Route path="/BlogDetail/:id" element={<><Navbar/> <BlogDetail /> <Footer /> </>} />
       </Routes>      
     </Router>
   );

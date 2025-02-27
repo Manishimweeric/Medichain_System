@@ -40,7 +40,7 @@ const AuthPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-900 flex items-center justify-center relative overflow-hidden mt-32">
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center relative overflow-hidden mt-19">
       {/* Orange decorative curves */}
       <div className="absolute top-0 left-0 w-64 h-64 bg-transparent border-t-4 border-l-4 border-orange-500 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
       <div className="absolute bottom-0 right-0 w-64 h-64 bg-transparent border-b-4 border-r-4 border-orange-500 rounded-full translate-x-1/2 translate-y-1/2"></div>

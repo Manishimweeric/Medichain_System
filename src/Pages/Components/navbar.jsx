@@ -54,10 +54,8 @@ const Navbar = () => {
           </li>
 
           {/* Features Dropdown */}
-          <li 
-            className="relative hover:bg-gray-700 px-4 py-2 rounded-lg transition duration-300"
-            onMouseEnter={() => setDropdown("features")}
-            onMouseLeave={() => setDropdown(null)}
+          <li className="relative hover:bg-gray-700 px-4 py-2 rounded-lg transition duration-300"
+           
           >
             <NavLink to="" className="hover:text-orange-500">
               Features

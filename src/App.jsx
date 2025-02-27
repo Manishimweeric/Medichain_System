@@ -3,18 +3,18 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import HomePage from './Pages/Home';
 import Footer from './Pages/Components/Footer';
 import Navbar  from "./Pages/Components/navbar";
-import Contactus from './Pages/Contactus';
-import EventDetails from './Pages/EventDetail';
-import MoreBlogs from './Pages/MoreBlogs';
-import Gallery from './Pages/Gallery';
-import About from './Pages/About';
-import Donate from './Pages/Donate';
-import Videos from './Pages/Videos';
-import Vision from './Pages/Vision';
-import Mission from './Pages/Mission';
-import Events from './Pages/Events';
-import BlogDetail from './Pages/BlogDetail';
-
+import Login  from "./Pages/User/Login";
+// import Contactus from './Pages/Contactus';
+// import EventDetails from './Pages/EventDetail';
+// import MoreBlogs from './Pages/MoreBlogs';
+// import Gallery from './Pages/Gallery';
+// import About from './Pages/About';
+// import Donate from './Pages/Donate';
+// import Videos from './Pages/Videos';
+// import Vision from './Pages/Vision';
+// import Mission from './Pages/Mission';
+// import Events from './Pages/Events';
+// import BlogDetail from './Pages/BlogDetail';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -22,21 +22,12 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<><Navbar/> <HomePage /> <Footer /> </>} />
-        <Route path="/contactus" element={<><Navbar/> <Contactus /> <Footer /> </>} />
-        <Route path="/EventDetails/:id" element={<><Navbar/> <EventDetails /> <Footer /> </>} />
-        <Route path="/MoreBlogs" element={<><Navbar/> <MoreBlogs /> <Footer /> </>} />
-        <Route path="/Gallery" element={<><Navbar/> <Gallery /> <Footer /> </>} />
-        <Route path="/Aboutus" element={<><Navbar/> <About /> <Footer /> </>} />
-        <Route path="/Donate" element={<><Navbar/> <Donate /> <Footer /> </>} />
-        <Route path="/Videos" element={<><Navbar/> <Videos /> <Footer /> </>} />
-        <Route path="/Mission" element={<><Navbar/> <Mission /> <Footer /> </>} />
-        <Route path="/Vision" element={<><Navbar/> <Vision /> <Footer /> </>} />
-        <Route path="/Events" element={<><Navbar/> <Events /> <Footer /> </>} />
-        <Route path="/BlogDetail/:id" element={<><Navbar/> <BlogDetail /> <Footer /> </>} />
+      <Route path="/" element={<><Navbar /><HomePage /><Footer/> </>} />
+      <Route path="/login" element={<><Navbar /><Login /><Footer/> </>} />
       </Routes>      
     </Router>
   );
 }
-
 export default App;
+
+

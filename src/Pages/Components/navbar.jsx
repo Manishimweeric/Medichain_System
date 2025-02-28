@@ -83,7 +83,7 @@ const Navbar = () => {
               className="flex items-center justify-center text-orange-500"
               onClick={closeMenu}
             >
-              <i className="fas fa-user mr-1"></i> {/* User Icon */}
+              <i className="fas fa-user mr-1"></i> 
               Login
             </Link>
           </li>

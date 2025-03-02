@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const AboutUs = () => {
     return (
@@ -39,10 +40,10 @@ const AboutUs = () => {
                     <p className="text-lg mb-4">
                         We believe in the power of technology to transform healthcare delivery. Together, we can make a significant impact on the lives of patients and healthcare providers.
                     </p>
-                    <a href="/contact-us" className="bg-green-700  text-white py-2 px-4 rounded hover:bg-green-700  transition-colors">
-                    <i className="fas fa-user-plus mr-1"></i> {/* User Plus Icon */}
+                    <Link to="/" className="bg-green-700  text-white py-2 px-4 rounded hover:bg-green-700  transition-colors">
+                    <i className="fas fa-user-plus mr-1"></i> 
                         Join Us
-                    </a>
+                    </Link>
                 </div>
             </div>
         </section>

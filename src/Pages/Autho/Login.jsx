@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-
+import { loginUser }  from '../../api';
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginData, setLoginData] = useState({ email: '', password: '' });
-
+  const [errorMessage, setErrorMessage] = useState('');
+  
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const handleChange = (e) => {
@@ -11,9 +14,18 @@ const LoginPage = () => {
     setLoginData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Logging in with:', loginData);
+    setErrorMessage('');
+    
+    const response = await loginUser(loginData);
+    
+    if (response.success) {
+      localStorage.setItem('access_token', response.data.access_token);
+      toast.success('Login successful!');
+    } else {
+      console.log(response.message);
+    }
   };
 
   return (

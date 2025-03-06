@@ -10,6 +10,8 @@ import AddSupplier from './Pages/Procurement/Supplier/AddSupplier';
 import GetSupplier from './Pages/Procurement/Supplier/GetSuppliers';
 import EditSupplier from './Pages/Procurement/Supplier/EditSupplier';
 import AddUser from './Pages/Procurement/User/AddUser';
+import GetUsers from './Pages/Procurement/User/GetUsers';
+
 
 
 
@@ -30,6 +32,7 @@ function App() {
           <Route path="GetSupplier" element={<GetSupplier />} />
           <Route path="editSupplier/:id" element={<EditSupplier />} />
           <Route path="addUser" element={<AddUser />} />
+          <Route path="GetUsers" element={<GetUsers />} />
 
 
       </Route>

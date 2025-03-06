@@ -82,3 +82,27 @@ export const registerUser = async (userData) => {
     return { success: false, message: error.response?.data?.detail || 'An error occurred while registering the user.' };
   }
 };
+
+export const fetchUsers = async () => {
+  try {
+    const response = await api.get('/users/');
+    return response; 
+  } catch (error) {
+    return { success: false, message: error.response?.data?.detail || 'Error fetching Users.' };
+  }
+};
+
+export const loginUser = async (loginData) => {
+  try {
+    const response = await api.post('/login/', loginData);
+    
+    if (response.status >= 200 && response.status < 300) {
+      localStorage.setItem('accessToken', response.data.access_token);
+      return { success: true, data: response.data };
+    } else {
+      return { success: false, message: response.data.detail || 'Login failed!' };
+    }
+  } catch (error) {
+    return { success: false, message: error.response?.data?.detail || 'An error occurred while logging in fhkfik.' };
+  }
+};

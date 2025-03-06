@@ -26,7 +26,6 @@ const SimpleBarChart = ({ data }) => {
 };
 
 const SimpleLineChart = ({ data }) => {
-  // This is a very simplified representation - in a real app you'd want to calculate proper SVG paths
   return (
     <div className="h-64 relative border-b border-l border-gray-200">
       <div className="absolute inset-0 flex items-center justify-center text-gray-400">
@@ -72,19 +71,16 @@ const Dashboard = () => {
   ];
 
   const contactsData = [
-    { id: 1, name: 'Tomatoes', email: 'tomatoes@dummy.com', products: 356, startDate: '01/11/2003', avatar: '/api/placeholder/32/32' },
+    { id: 1, name: 'Tomatoes', email: 'tomatoes@dummy.com', products: 356, startDate: '01/11/2003', avatar: '/images/hd3.jpeg' },
     { id: 2, name: 'Chademgle', email: 'chademgle@dummy.com', products: 568, startDate: '01/11/2003', avatar: '/api/placeholder/32/32' },
     { id: 3, name: 'Spillnotdavid', email: 'spillnotdavid@dummy.com', products: 201, startDate: '12/11/2003', avatar: '/api/placeholder/32/32' },
-    { id: 4, name: 'Kurafire', email: 'kurafire@dummy.com', products: 56, startDate: '14/11/2003', avatar: '/api/placeholder/32/32' },
-    { id: 5, name: 'Shahodk', email: 'shahodk@dummy.com', products: 356, startDate: '20/11/2003', avatar: '/api/placeholder/32/32' },
-    { id: 6, name: 'Adhamadnaviawy', email: 'adhamadnaviawy@dummy.com', products: 956, startDate: '24/11/2003', avatar: '/api/placeholder/32/32' },
   ];
 
   const [activeMenuItem, setActiveMenuItem] = useState('Dashboard');
 
   const menuItems = [
     { name: 'Dashboard', icon: 'grid-2x2', badge: null },
-    { name: 'UI Elements', icon: 'layout', badge: 14 },
+    { name: 'UI Elements', icon: 'layout', badge: 14 }, 
     { name: 'Components', icon: 'puzzle', badge: null, hasChildren: true },
     { name: 'Typography', icon: 'type', badge: null },
     { name: 'Forms', icon: 'clipboard', badge: null, hasChildren: true },
@@ -203,7 +199,7 @@ const Dashboard = () => {
                       <td className="px-4 py-4 whitespace-nowrap">
                         <div className="flex items-center">
                           <div className="flex-shrink-0 h-8 w-8 rounded-full overflow-hidden">
-                            <img src="https://via.placeholder.com/32" alt={contact.name} className="h-8 w-8" />
+                            <img src="/images/ppe.jpg" alt={contact.name} className="h-8 w-8" />
                           </div>
                         </div>
                       </td>

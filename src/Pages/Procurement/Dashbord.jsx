@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { fetchSuppliers } from '../../api';
+import { fetchSuppliers,fetchUsers } from '../../api';
 
 const Dashboard = () => {
   const [supplierCount, setSupplierCount] = useState(0);
+  const [usersCount, setUsersCount] = useState(0);
 
   useEffect(() => {
     const getSuppliers = async () => {
-      const result = await fetchSuppliers();     
-        setSupplierCount(result.data.length); // Count suppliers on the frontend
+      const Supplierresult = await fetchSuppliers();  
+      const Usersresult = await fetchUsers();     
+        setSupplierCount(Supplierresult.data.length); 
+        setUsersCount(Usersresult.data.length); 
       
     };
     getSuppliers();
@@ -17,7 +20,7 @@ const Dashboard = () => {
   const menuItems = [
     { name: 'Dashboard', icon: '🏠', badge: null, path: '/Procurement/home' },
     { name: 'Supplier', icon: '🛠️', badge: supplierCount, path: '/Procurement/GetSupplier' },
-    { name: 'User', icon: '🧩', badge: null, hasChildren: true, path: '/Procurement/addUser' },
+    { name: 'User', icon: '🧩', badge: usersCount, hasChildren: true, path: '/Procurement/GetUsers' },
     { name: 'Typography', icon: '🔤', badge: null, path: '/Procurement/typography' },
     { name: 'Forms', icon: '📝', badge: null, hasChildren: true, path: '/Procurement/forms' },
     { name: 'Tables', icon: '📊', badge: null, hasChildren: true, path: '/Procurement/tables' },

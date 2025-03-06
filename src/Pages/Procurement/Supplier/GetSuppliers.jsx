@@ -37,6 +37,7 @@ const SupplierList = () => {
       if (result.success) {
         setSuppliers(suppliers.filter(supplier => supplier.id !== id));
         toast.success('Supplier deleted successfully!');
+        
       } else {
         toast.error(result.message || 'Failed to delete supplier');
       }
@@ -63,7 +64,7 @@ const SupplierList = () => {
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-gray-200">
-                <th className="border p-2">ID</th>
+                <th className="border p-2">#</th>
                 <th className="border p-2">Name</th>
                 <th className="border p-2">Email</th>
                 <th className="border p-2">Phone</th>
@@ -75,7 +76,7 @@ const SupplierList = () => {
             <tbody>
               {suppliers.map((supplier, index) => (
                 <tr key={index} className="border hover:bg-gray-50 transition-all relative">
-                  <td className="border p-2 text-center">{supplier.id}</td>
+                  <td className="border p-2 text-center">{index+1}</td>
                   <td className="border p-2 text-center">{supplier.name}</td>
                   <td className="border p-2 text-center">{supplier.email}</td>
                   <td className="border p-2 text-center">{supplier.phone}</td>

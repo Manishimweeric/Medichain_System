@@ -1,11 +1,31 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { fetchSuppliers,fetchUsers } from '../../api';
+import { fetchSuppliers,fetchUsers,logoutUser } from '../../api';
+import { FaUserCircle } from 'react-icons/fa';
+
+
 
 const Dashboard = () => {
   const [supplierCount, setSupplierCount] = useState(0);
   const [usersCount, setUsersCount] = useState(0);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
+  };
+
+  const handleLogout = async () => {
+    const access_token = localStorage.getItem('access_token'); // Retrieve refresh token
+    const response = await logoutUser(access_token);
+  
+    if (response.success) {
+      console.log(response.message);
+      window.location.href = '/login'; 
+      console.error(response.message);
+    }
+  };
+  
 
   useEffect(() => {
     const getSuppliers = async () => {
@@ -48,28 +68,49 @@ const Dashboard = () => {
 
       {/* Header */}
       <header className="bg-gray-800 text-white py-2 px-4 flex justify-between items-center">
-        <div className="flex items-center space-x-6">
-          <div className="flex items-center">
-            <img
-              src="/images/medlogo.png"
-              alt="Medicain System Logo"
-              className="h-8 w-10 md:h-8 md:w-12 object-contain"
-            />
-            <h1 className="text-orange-500 text-xl md:text-xl font-bold tracking-tight">
-              Medicain <span className="text-white">System</span>
-            </h1>
-          </div>
+      <div className="flex items-center space-x-6">
+        <div className="flex items-center">
+          <img
+            src="/images/medlogo.png"
+            alt="Medicain System Logo"
+            className="h-8 w-10 md:h-8 md:w-12 object-contain"
+          />
+          <h1 className="text-orange-500 text-xl md:text-xl font-bold tracking-tight">
+            Medicain <span className="text-white">System</span>
+          </h1>
         </div>
-        <div className="flex items-center space-x-4">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="bg-gray-700 text-white text-sm rounded-full px-3 py-1 pl-8 w-32 md:w-48 focus:outline-none focus:ring-1 focus:ring-blue-500"
-            />
-          </div>
+      </div>
+      <div className="flex items-center space-x-4">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search..."
+            className="bg-gray-700 text-white text-sm rounded-full px-3 py-1 pl-8 w-32 md:w-48 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          />
         </div>
-      </header>
+        <div className="relative">
+          <button
+            onClick={toggleDropdown}
+            className="text-white focus:outline-none"
+          >
+            <FaUserCircle size={24} />
+          </button>
+          {dropdownOpen && (
+            <div className="absolute right-0 mt-2 bg-gray-700 text-white rounded-lg shadow-lg w-40">
+              <ul>
+                <li className="px-4 py-2 hover:bg-gray-600 cursor-pointer">Profile</li>
+                <li
+                  onClick={handleLogout}
+                  className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                >
+                  Logout
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    </header>
 
       {/* Main Content */}
       <div className="flex flex-1 overflow-hidden">

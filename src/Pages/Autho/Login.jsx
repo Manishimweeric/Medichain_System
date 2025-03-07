@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { loginUser }  from '../../api';
-import { toast } from 'react-toastify';
+import { toast,ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useNavigate } from 'react-router-dom';
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [loginData, setLoginData] = useState({ email: '', password: '' });
   const [errorMessage, setErrorMessage] = useState('');
-  
+  const navigate = useNavigate();
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
 
   const handleChange = (e) => {
@@ -15,18 +16,45 @@ const LoginPage = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setErrorMessage('');
+    e.preventDefault();   
+    console.log(loginData); // Add this line
     
-    const response = await loginUser(loginData);
-    
-    if (response.success) {
-      localStorage.setItem('access_token', response.data.access_token);
-      toast.success('Login successful!');
+    if (!loginData.email || !loginData.password) {
+      setErrorMessage('Please fill in all fields.');
+      return;
+    }
+  
+    const response = await loginUser(loginData);    
+  
+    if (response.data) {
+      console.log(response.data.user.role);
+  
+      if (response.data.user.role) {
+        localStorage.setItem('access_token', response.data.access_token);
+        localStorage.setItem('refresh_token', response.data.refresh_token);
+        toast.success('Login successful!');  
+        switch (response.data.user.role) {
+          case 'procurement':
+            navigate('/Procurement/home');
+            break;
+          case 'warehouse':
+            navigate('/warehouse-dashboard');
+            break;
+          case 'supplier':  
+            navigate('/supplier-dashboard');
+            break;
+          default:
+            toast.error('Unknown role, redirecting to default page.');
+            navigate('/default-dashboard');
+            break;
+        }
+      }
     } else {
+      toast.info('Incorrect Email or Password!');
       console.log(response.message);
     }
   };
+  
 
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center relative overflow-hidden p-4">
@@ -127,6 +155,17 @@ const LoginPage = () => {
           </form>
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 };

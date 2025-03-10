@@ -16,19 +16,14 @@ const LoginPage = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();   
-    console.log(loginData); // Add this line
-    
+    e.preventDefault();       
     if (!loginData.email || !loginData.password) {
       setErrorMessage('Please fill in all fields.');
       return;
-    }
-  
+    }  
     const response = await loginUser(loginData);    
   
     if (response.data) {
-      console.log(response.data.user.role);
-  
       if (response.data.user.role) {
         localStorage.setItem('access_token', response.data.access_token);
         localStorage.setItem('refresh_token', response.data.refresh_token);
@@ -58,6 +53,7 @@ const LoginPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 flex items-center justify-center relative overflow-hidden p-4">
+      
       <div className="absolute top-0 left-0 w-40 h-40 bg-transparent border-t-4 border-l-4 border-orange-500 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
       <div className="absolute bottom-0 right-0 w-40 h-40 bg-transparent border-b-4 border-r-4 border-orange-500 rounded-full translate-x-1/2 translate-y-1/2"></div>
 

@@ -12,13 +12,17 @@ const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Token ${token}`;
-    }
-    return config;
+      const token = localStorage.getItem('access_token');
+      if (token) {
+        config.headers.Authorization = `Token ${token}`;  
+      } else {
+        console.log('Access token not found');
+        window.location.href = '/login';
+      }
+      return config;
   },
   (error) => {
+    console.log('Request Error:', error); 
     return Promise.reject(error);
   }
 );
@@ -108,7 +112,7 @@ export const fetchUsers = async () => {
 
 export const loginUser = async (loginData) => {
   try {
-    const response = await api.post('/login/', loginData);
+    const response = await axios.post(`${API_BASE_URL}/login/`, loginData);
     return {
       success: true,
       data: response.data,
@@ -125,24 +129,11 @@ export const loginUser = async (loginData) => {
   }
 };
 
-export const logoutUser = async (access_token) => {
-  if (!access_token) {
-    return { success: false, message: 'No access token provided.' };
-  }
-
-  try {
-    const response = await post(`${API_BASE_URL}/logout/`, { access_token });
-
-    if (response.status >= 200 && response.status < 300) {
-      localStorage.removeItem('access_token'); 
-      return { success: true, message: 'Logout successful!' };
-    } else {
-      return { success: false, message: response.data.detail || 'Something went wrong!' };
-    }
-  } catch (error) {
-    const errorMessage = error.response?.data?.detail || error.message || 'An error occurred during logout.';
-    return { success: false, message: errorMessage };
-  }
+export const logoutUser = () => {
+  localStorage.removeItem('access_token');
+  window.location.href = '/login';
+  return { success: true, message: 'Logout successful!' };
 };
+
 
 

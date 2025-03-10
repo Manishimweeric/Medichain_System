@@ -24,6 +24,7 @@ const Dashboard = () => {
       window.location.href = '/login'; 
       console.error(response.message);
     }
+    
   };
   
 
@@ -53,7 +54,6 @@ const Dashboard = () => {
 
   return (
     <div className="flex flex-col h-screen bg-gray-100">
-      {/* Toast Container - positioned in the corner */}
       <ToastContainer
         position="top-right"
         autoClose={5000}
@@ -65,7 +65,6 @@ const Dashboard = () => {
         draggable
         pauseOnHover
       />
-
       {/* Header */}
       <header className="bg-gray-800 text-white py-2 px-4 flex justify-between items-center">
       <div className="flex items-center space-x-6">

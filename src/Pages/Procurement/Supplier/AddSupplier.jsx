@@ -31,12 +31,10 @@ const SupplierRegister = () => {
     e.preventDefault();
     const { name, email, phone, address } = formData;
 
-    // Simple validation
     if (!name || !email || !phone || !address) {
         toast.error('All fields marked with * are required!');
       return;
     }
-    console.log('data:', JSON.stringify(formData));
 
     setLoading(true);
     try {

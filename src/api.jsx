@@ -135,5 +135,22 @@ export const logoutUser = () => {
   return { success: true, message: 'Logout successful!' };
 };
 
+export const sendOTP = async (email) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/send-otp/`, { email });
+    return { success: true, message: 'OTP sent successfully!' };
+  } catch (error) {
+    return { success: false, message: error.response?.data?.error || 'Error sending OTP.' };
+  }
+};
+
+export const verifyOTP = async (email, otp) => {
+  try {
+    const response = await axios.post(`${API_BASE_URL}/verify-otp/`, { email, otp });
+    return { success: true, message: 'OTP verified successfully!' };
+  } catch (error) {
+    return { success: false, message: error.response?.data?.error || 'Invalid OTP.' };
+  }
+};
 
 

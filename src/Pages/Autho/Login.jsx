@@ -94,6 +94,8 @@ const LoginPage = () => {
                 <label className="block text-gray-400 text-sm">Password</label>
                 <a href="#" className="text-orange-500 text-xs hover:underline">Forgot Password?</a>
               </div>
+
+              
               <div className="relative">
                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-500">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">

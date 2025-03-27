@@ -41,7 +41,6 @@ const SimpleLineChart = ({ data }) => {
     </div>
   );
 };
-
 const Dashboard = () => {
     const [supplierCount, setSupplierCount] = useState(0);
     const [usersCount, setUsersCount] = useState(0);
@@ -161,6 +160,7 @@ const Dashboard = () => {
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+            
             {/* Total Revenue Chart */}
             <div className="bg-white rounded-md p-6 border border-gray-200">
               <h2 className="text-lg font-medium mb-6">Total Revenue</h2>

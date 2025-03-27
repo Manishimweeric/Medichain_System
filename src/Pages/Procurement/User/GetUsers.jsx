@@ -27,12 +27,10 @@ const UserList = () => {
 
   const handleEdit = (id) => {
     toast.info(`Editing user with ID: ${id}`);
-    // Redirect to edit page
   };
 
   const handleDelete = (id) => {
     toast.error(`Deleting user with ID: ${id}`);
-    // Handle delete logic
   };
 
   const toggleDropdown = (index) => {
@@ -114,7 +112,7 @@ const UserList = () => {
                 ))
               ) : (
                 <tr>
-                  <td colSpan="3" className="text-center py-6 text-gray-500">
+                  <td colSpan="5" className="text-center py-6 text-gray-500">
                     No users found.
                   </td>
                 </tr>

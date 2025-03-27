@@ -1,154 +1,182 @@
-import React, { useState } from 'react';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useEffect, useState } from "react";
+import { NavLink, Outlet } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import { fetchSuppliers, fetchUsers,logoutUser,fetchInventory,fetchProcurementRequests } from '../../api';
+import { FaUserCircle } from 'react-icons/fa';
 
-const ContactUsPage = () => {
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: '',
-  });
 
-  const [submitted, setSubmitted] = useState(false);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+const Dashboard = () => {
+  const [supplierCount, setSupplierCount] = useState(0);
+  const [usersCount, setUsersCount] = useState(0);
+  const [InventoryCount, setInventoryCount] = useState(0);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const [procurementRequestsCount, setProcurementRequestsCount] = useState(0);
+
+  const toggleDropdown = () => {
+    setDropdownOpen(!dropdownOpen);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();    
-    if (!formData.name || !formData.email || !formData.phone || !formData.message) {
-      toast.error('Please fill out all fields');
-      return;
+  const handleLogout = async () => {
+    const access_token = localStorage.getItem('access_token');
+    const response = await logoutUser(access_token);
+    if (response.success) {
+      console.log(response.message);
+      window.location.href = '/login'; 
+      console.error(response.message);
     }
-
-    setTimeout(() => {
-      setSubmitted(true);
-      toast.success('Your message has been sent successfully!');
-      
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        message: '',
-      });
-    }, 1000);
+    
   };
+  
+
+  useEffect(() => {
+    const getSuppliers = async () => {
+      const Supplierresult = await fetchSuppliers();  
+      const Usersresult = await fetchUsers();  
+      const Inventoryresult = await fetchInventory();  
+      const ProcurementRequestsresult = await fetchProcurementRequests(); 
+        setSupplierCount(Supplierresult.data.length); 
+        setUsersCount(Usersresult.data.length);   
+        setInventoryCount(Inventoryresult.data.length);   
+        setProcurementRequestsCount(ProcurementRequestsresult.data.length);
+    };
+    getSuppliers();
+  }, []);
+  const menuItems = [
+    { name: 'Dashboard', icon: '🏠', badge: null, path: '/Procurement/home' },
+    { name: 'Supplier', icon: '🛠️', badge: supplierCount, path: '/Procurement/GetSupplier' },
+    { name: 'User', icon: '🧩', badge: usersCount, hasChildren: true, path: '/Procurement/GetUsers' },
+    { name: 'Inventory', icon: '🔤', badge: InventoryCount, path: '/Procurement/GetInventory' },
+    { name: 'Warehouse Request', icon: '📝', badge: procurementRequestsCount, hasChildren: true, path: '/Procurement/GetRequest' },
+    { name: 'Supplier Order', icon: '📊', badge: null, hasChildren: true, path: '/Procurement/addOrder' },
+    { name: 'Charts', icon: '📈', badge: 3, path: '/Procurement/charts' },
+    { name: 'Maps', icon: '🗺️', badge: null, path: '/Procurement/maps' },
+    { name: 'Pages', icon: '📄', badge: null, hasChildren: true, path: '/Procurement/pages' },
+    { name: 'Extra Pages', icon: '➕', badge: null, hasChildren: true, path: '/Procurement/extra-pages' },
+    { name: 'Multi Level', icon: '🔗', badge: null, hasChildren: true, path: '/Procurement/multi-level' },
+  ];
 
   return (
-    <div className="py-16 bg-gray-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl font-bold text-gray-900">Contact Us</h2>
-          <div className="w-24 h-1 bg-blue-600 mx-auto mt-4"></div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Left Column: Contact Details and Map */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <div className="mb-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Contact Information</h3>
-              <p className="mb-2">📍 KG 213 ST, Kigali-Rwanda</p>
-              <p className="mb-2">📧 quizerahubert@gmail.com</p>
-              <p>📞 +250 785 766 218</p>
-            </div>
-
-            <div className="mt-6">
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">Find Us</h3>
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3989.299817950991!2d30.10679697496918!3d-1.951749398572696!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca45d5d2f8d4d%3A0x383c00f1b8b57f!2sKigali%2C%20Rwanda!5e0!3m2!1sen!2sus!4v1700066568000!5m2!1sen!2sus"
-                width="100%"
-                height="360"
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-                className="rounded-lg shadow-md"
-              ></iframe>
-            </div>
-          </div>
-
-          {/* Right Column: Contact Form */}
-          <div className="bg-white rounded-lg shadow-md p-6">
-            <form className="space-y-6" onSubmit={handleSubmit}>
-              <div>
-                <label htmlFor="name" className="block text-gray-700 font-medium mb-2">
-                  Your Name
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Your Name"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="email" className="block text-gray-700 font-medium mb-2">
-                  Your Email
-                </label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Your Email"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="phone" className="block text-gray-700 font-medium mb-2">
-                  Phone Number
-                </label>
-                <input
-                  type="tel"
-                  id="phone"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Enter your phone number"
-                  required
-                />
-              </div>
-              <div>
-                <label htmlFor="message" className="block text-gray-700 font-medium mb-2">
-                  Message
-                </label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows="4"
-                  value={formData.message}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500"
-                  placeholder="Your Message"
-                  required
-                ></textarea>
-              </div>
-              <div className="flex justify-end">
-                <button
-                  type="submit"
-                  className="px-6 py-3 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 transition-colors shadow-md hover:shadow-lg"
-                >
-                  Send Message
-                </button>
-              </div>
-            </form>
-          </div>
+    <div className="flex flex-col h-screen bg-gray-100">
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      {/* Header */}
+      <header className="bg-gray-800 text-white py-2 px-4 flex justify-between items-center">
+      <div className="flex items-center space-x-6">
+        <div className="flex items-center">
+          <img
+            src="/images/medlogo.png"
+            alt="Medicain System Logo"
+            className="h-8 w-10 md:h-8 md:w-12 object-contain"
+          />
+          <h1 className="text-orange-500 text-xl md:text-xl font-bold tracking-tight">
+            Medicain <span className="text-white">System</span>
+          </h1>
         </div>
       </div>
+      <div className="flex items-center space-x-4">
+        <div className="relative">
+          <input
+            type="text"
+            placeholder="Search..."
+            className="bg-gray-700 text-white text-sm rounded-full px-3 py-1 pl-8 w-32 md:w-48 focus:outline-none focus:ring-1 focus:ring-blue-500"
+          />
+        </div>
+        <div className="relative">
+          <button
+            onClick={toggleDropdown}
+            className="text-white focus:outline-none"
+          >
+            <FaUserCircle size={24} />
+          </button>
+          {dropdownOpen && (
+            <div className="absolute right-0 mt-2 bg-gray-700 text-white rounded-lg shadow-lg w-40">
+              <ul>
+                <li className="px-4 py-2 hover:bg-gray-600 cursor-pointer">Profile</li>
+                <li
+                  onClick={handleLogout}
+                  className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
+                >
+                  Logout
+                </li>
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    </header>
 
-      {/* Toast Notification */}
-      <ToastContainer position="top-right" autoClose={3000} hideProgressBar={false} />
+      {/* Main Content */}
+      <div className="flex flex-1 overflow-hidden">
+        {/* Sidebar */}
+        <aside className="w-64 bg-white border-r border-gray-200 flex flex-col">
+          {/* User Profile */}
+          <div className="p-4 border-b border-gray-200 flex items-center">
+            <div className="w-10 h-10 rounded-full overflow-hidden mr-3">
+              <img src="/images/pf3.jpeg" alt="Stanley Jones" className="w-full h-full object-cover" />
+            </div>
+            <div>
+              <p className="font-medium text-sm">Stanley Jones</p>
+              <p className="text-gray-500 text-xs">Administrator</p>
+            </div>
+          </div>
+
+          {/* Sidebar Menu */}
+          <nav className="flex-1 overflow-y-auto py-4">
+            <ul>
+              {menuItems.map((item, index) => (
+                <li key={index} className="mb-1">
+                  <NavLink
+                    to={item.path}
+                    className={({ isActive }) =>
+                      `flex items-center justify-between px-4 py-2 text-sm ${
+                        isActive
+                          ? 'bg-blue-50 text-blue-600 border-l-4 border-blue-600'
+                          : 'text-gray-700 hover:bg-gray-100'
+                      }`
+                    }
+                  >
+                    <div className="flex items-center">
+                      {/* Render the emoji */}
+                      <span className="text-md mr-3">{item.icon}</span>
+                      <span>{item.name}</span>
+                    </div>
+                    <div className="flex items-center">
+                      {item.badge && (
+                        <span className="bg-blue-500 text-white text-xs px-1.5 py-0.5 rounded-sm mr-2">
+                          {item.badge}
+                        </span>
+                      )}
+                    </div>
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </aside>
+
+        {/* Content Area */}
+        <main className="flex-1 overflow-y-auto p-6">
+          <Outlet />
+
+          {/* Footer */}
+          <footer className="mt-6 py-4 px-6 flex justify-between items-center text-xs text-gray-500">
+            <div>Simple Admin • Copyright © 2016</div>
+            <div>Project Completed: 95%</div>
+          </footer>
+        </main>
+      </div>
     </div>
   );
 };
 
-export default ContactUsPage;
+export default Dashboard;

@@ -7,6 +7,8 @@ import { FaEllipsisV } from "react-icons/fa";
 
 const SupplierList = () => {
   const [suppliers, setSuppliers] = useState([]);
+  const [filteredSuppliers, setFilteredSuppliers] = useState([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [error, setError] = useState(null);
   const [openDropdown, setOpenDropdown] = useState(null);
   const navigate = useNavigate(); 
@@ -16,12 +18,25 @@ const SupplierList = () => {
       const result = await fetchSuppliers();
       if (result && result.data) {
         setSuppliers(result.data);
+        setFilteredSuppliers(result.data); // Set filtered suppliers initially
       } else {
         toast.error(result.detail || 'Error fetching suppliers');
       }
     };
     getSuppliers();
   }, []);
+
+  // Handle the search/filter by name
+  const handleSearchChange = (e) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+
+    // Filter suppliers based on the name
+    const filtered = suppliers.filter((supplier) =>
+      supplier.name.toLowerCase().includes(term)
+    );
+    setFilteredSuppliers(filtered);
+  };
 
   const handleDropdownToggle = (index) => {
     setOpenDropdown(openDropdown === index ? null : index);
@@ -30,14 +45,15 @@ const SupplierList = () => {
   const handleEdit = (id) => {
     navigate(`/Procurement/editSupplier/${id}`); 
   };
+
   const handleDelete = async (id) => {
     const confirmed = window.confirm("Are you sure you want to delete this supplier?");
     if (confirmed) {
       const result = await deleteSupplier(id);
       if (result.success) {
         setSuppliers(suppliers.filter(supplier => supplier.id !== id));
+        setFilteredSuppliers(filteredSuppliers.filter(supplier => supplier.id !== id)); // Update filtered suppliers
         toast.success('Supplier deleted successfully!');
-        
       } else {
         toast.error(result.message || 'Failed to delete supplier');
       }
@@ -56,32 +72,43 @@ const SupplierList = () => {
         </Link>
       </div>
 
+      {/* Search Input */}
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="Search by supplier name..."
+          value={searchTerm}
+          onChange={handleSearchChange}
+          className="w-full px-4 py-2 border border-gray-300 rounded-md"
+        />
+      </div>
+
       <div className="bg-white shadow-md rounded-lg p-4">
         {error && <p className="text-center text-red-500">{error}</p>}
-        {suppliers.length === 0 ? (
+        {filteredSuppliers.length === 0 ? (
           <p className="text-center text-gray-500">No suppliers available. Please add a new supplier.</p>
         ) : (
           <table className="w-full border-collapse">
             <thead>
               <tr className="bg-gray-200">
-                <th className="border p-2">#</th>
-                <th className="border p-2">Name</th>
-                <th className="border p-2">Email</th>
-                <th className="border p-2">Phone</th>
-                <th className="border p-2">Address</th>
-                <th className="border p-2">Joined on</th>
-                <th className="border p-2">Actions</th>
+                <th className="px-4 py-3 text-xs font-medium text-center text-gray-500 uppercase tracking-wider">#</th>
+                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
+                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Phone</th>
+                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Address</th>
+                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Joined on</th>
+                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {suppliers.map((supplier, index) => (
-                <tr key={index} className="border hover:bg-gray-50 transition-all relative">
-                  <td className="border p-2 text-center">{index+1}</td>
-                  <td className="border p-2 text-center">{supplier.name}</td>
-                  <td className="border p-2 text-center">{supplier.email}</td>
-                  <td className="border p-2 text-center">{supplier.phone}</td>
-                  <td className="border p-2 text-center">{supplier.address}</td>
-                  <td className="border p-2 text-center">
+              {filteredSuppliers.map((supplier, index) => (
+                <tr key={index} className="border hover:bg-gray-50 transition-all relative text-sm">
+                  <td className="px-4 py-4 whitespace-nowrap text-center">{index + 1}</td>
+                  <td className="px-4 py-4 whitespace-nowrap text-center">{supplier.name}</td>
+                  <td className="px-4 py-4 whitespace-nowrap text-center">{supplier.email}</td>
+                  <td className="px-4 py-4 whitespace-nowrap text-center">{supplier.phone}</td>
+                  <td className="px-4 py-4 whitespace-nowrap text-center">{supplier.address}</td>
+                  <td className="px-4 py-4 whitespace-nowrap text-center">
                     {new Date(supplier.registered_on).toISOString().split('T')[0]}
                   </td>
                   <td className="border p-2 text-center relative">

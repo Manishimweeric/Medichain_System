@@ -17,7 +17,6 @@ const Home = () => {
       <TeamMembers />
       <ContactUs />
       <ScrollToTop />      
-      
     </div>
   );
 };

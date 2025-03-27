@@ -11,10 +11,11 @@ import GetSupplier from './Pages/Procurement/Supplier/GetSuppliers';
 import EditSupplier from './Pages/Procurement/Supplier/EditSupplier';
 import AddUser from './Pages/Procurement/User/AddUser';
 import GetUsers from './Pages/Procurement/User/GetUsers';
-
-
-
-
+import AddInventory from './Pages/Procurement/Inventory/AddInventory';
+import GetInventory from './Pages/Procurement/Inventory/GetInventory';
+import AddRequest from './Pages/Procurement/Request/AddRequest';
+import GetRequest from './Pages/Procurement/Request/GetRequest';
+import AddOrder from './Pages/Procurement/Order/AddOrder';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -33,10 +34,13 @@ function App() {
           <Route path="editSupplier/:id" element={<EditSupplier />} />
           <Route path="addUser" element={<AddUser />} />
           <Route path="GetUsers" element={<GetUsers />} />
+          <Route path="addInventory" element={<AddInventory />} />
+          <Route path="GetInventory" element={<GetInventory />} />
+          <Route path="addRequest" element={<AddRequest />} />
+          <Route path="GetRequest" element={<GetRequest />} />
+          <Route path="addOrder" element={<AddOrder />} />
 
-
-      </Route>
-      
+      </Route>      
       </Routes>      
     </Router>
   );

@@ -28,7 +28,7 @@ const Navbar = () => {
       <nav className="fixed top-10 left-0 w-full bg-gray-800 shadow-lg px-2 md:px-6 py-4 z-50 flex justify-between items-center">
         <div className="flex items-center space-x-3">
           <img 
-            src="/images/medlogo.png" // Keep the original image path
+            src="/images/medlogo.png"
             alt="Medicain System Logo" 
             className="h-10 w-10 md:h-12 md:w-12 object-contain"
           />

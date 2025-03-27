@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import { registerSupplier } from '../../../api';
-import { Link } from 'react-router-dom'; 
+import { Link,useNavigate  } from 'react-router-dom'; 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -17,6 +17,7 @@ const SupplierRegister = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -52,6 +53,7 @@ const SupplierRegister = () => {
           rating: 0.0,
         });
         setError('');
+        navigate('/Procurement/GetSupplier');
       } else {
         toast.error(message);
       }

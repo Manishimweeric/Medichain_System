@@ -16,6 +16,9 @@ import GetInventory from './Pages/Procurement/Inventory/GetInventory';
 import AddRequest from './Pages/Procurement/Request/AddRequest';
 import GetRequest from './Pages/Procurement/Request/GetRequest';
 import AddOrder from './Pages/Procurement/Order/AddOrder';
+import GetOrder from './Pages/Procurement/Order/GetOrder';
+import AddWarehouse from './Pages/Procurement/Warehouse/AddWarehouse';
+import GetWarehouse from './Pages/Procurement/Warehouse/GetWarehouse';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -39,6 +42,9 @@ function App() {
           <Route path="addRequest" element={<AddRequest />} />
           <Route path="GetRequest" element={<GetRequest />} />
           <Route path="addOrder" element={<AddOrder />} />
+          <Route path="GetOrder" element={<GetOrder />} />
+          <Route path="addWarehouse" element={<AddWarehouse />} />
+          <Route path="GetWarehouse" element={<GetWarehouse />} />
 
       </Route>      
       </Routes>      

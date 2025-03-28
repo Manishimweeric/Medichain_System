@@ -44,6 +44,7 @@ const SupplierRegister = () => {
 
       if (success) {
         toast.success(message);
+        window.location.reload();
         setFormData({
           name: '',
           contact_person: '',

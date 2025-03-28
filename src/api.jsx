@@ -155,6 +155,7 @@ export const fetchUsers = async () => {
 
 
 export const registerInventory = async (inventoryData) => {
+  console.log(inventoryData)
   try {
     const response = await api.post('/inventory/', inventoryData);
     if (response.status >= 200 && response.status < 300) {
@@ -288,6 +289,92 @@ export const fetchOrders = async () => {
     return {
       success: false,
       message: error.response?.data?.message || 'Failed to fetch orders'
+    };
+  }
+};
+
+export const approveOrder = async () => {
+  try {
+    const response = await api.get('/orders/');
+
+    return {
+      success: true,
+      data: response.data,
+      message: 'Orders fetched successfully'
+    };
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    return {
+      success: false,
+      message: error.response?.data?.message || 'Failed to fetch orders'
+    };
+  }
+};
+export const sendFeedback = async () => {
+  try {
+    const response = await api.get('/orders/');
+
+    return {
+      success: true,
+      data: response.data,
+      message: 'Orders fetched successfully'
+    };
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    return {
+      success: false,
+      message: error.response?.data?.message || 'Failed to fetch orders'
+    };
+  }
+};
+
+
+export const createWarehouse = async (warehouseData) => {
+  try {
+    const response = await api.post('/warehouse/', warehouseData);
+    return {
+      success: true,
+      data: response.data,
+      message: 'Warehouse created successfully'
+    };
+  } catch (error) {
+    console.error('Error creating Warehouse:', error);
+    return {
+      success: false,
+      message: error.response?.data?.message || 'Failed to create warehouse'
+    };
+  }
+};
+
+export const fetchWarehouses = async () => {
+  try {
+    const response = await api.get('/warehouse/');
+
+    return {
+      success: true,
+      data: response.data,
+    };
+  } catch (error) {
+    console.error('Error fetching Warehouse:', error);
+    return {
+      success: false,
+      message: error.response?.data?.message || 'Failed to fetch Warehouse'
+    };
+  }
+};
+export const deleteWarehouse = async (warehouseid) => {
+  try {
+    const response = await api.delete(`/warehouse/${warehouseid}`, );
+    return {
+      success: true,
+      data: response.data,
+      message: 'Warehouse Delete successfully'
+    };
+  } catch (error) {
+    console.error('Error creating Warehouse:', error);
+    return {
+      success: false,
+      message: error.response?.data?.message || 'Failed to create warehouse'
     };
   }
 };

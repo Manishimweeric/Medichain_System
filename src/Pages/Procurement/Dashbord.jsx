@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { fetchSuppliers, fetchUsers,logoutUser,fetchInventory,fetchProcurementRequests } from '../../api';
+import { fetchSuppliers, fetchUsers,logoutUser,fetchInventory,fetchProcurementRequests,fetchOrders } from '../../api';
 import { FaUserCircle } from 'react-icons/fa';
 
 
@@ -12,6 +12,7 @@ const Dashboard = () => {
   const [InventoryCount, setInventoryCount] = useState(0);
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [procurementRequestsCount, setProcurementRequestsCount] = useState(0);
+  const [ordersCount, setOrdersCount] = useState(0);
 
   const toggleDropdown = () => {
     setDropdownOpen(!dropdownOpen);
@@ -35,10 +36,12 @@ const Dashboard = () => {
       const Usersresult = await fetchUsers();  
       const Inventoryresult = await fetchInventory();  
       const ProcurementRequestsresult = await fetchProcurementRequests(); 
-        setSupplierCount(Supplierresult.data.length); 
-        setUsersCount(Usersresult.data.length);   
-        setInventoryCount(Inventoryresult.data.length);   
-        setProcurementRequestsCount(ProcurementRequestsresult.data.length);
+      const Ordersresult = await fetchOrders();
+      setSupplierCount(Supplierresult.data.length); 
+      setUsersCount(Usersresult.data.length);   
+      setInventoryCount(Inventoryresult.data.length);   
+      setProcurementRequestsCount(ProcurementRequestsresult.data.length); 
+      setOrdersCount(Ordersresult.data.length);
     };
     getSuppliers();
   }, []);
@@ -48,8 +51,8 @@ const Dashboard = () => {
     { name: 'User', icon: '🧩', badge: usersCount, hasChildren: true, path: '/Procurement/GetUsers' },
     { name: 'Inventory', icon: '🔤', badge: InventoryCount, path: '/Procurement/GetInventory' },
     { name: 'Warehouse Request', icon: '📝', badge: procurementRequestsCount, hasChildren: true, path: '/Procurement/GetRequest' },
-    { name: 'Supplier Order', icon: '📊', badge: null, hasChildren: true, path: '/Procurement/addOrder' },
-    { name: 'Charts', icon: '📈', badge: 3, path: '/Procurement/charts' },
+    { name: 'Supplier Order', icon: '📊', badge: ordersCount, hasChildren: true, path: '/Procurement/GetOrder' },
+    { name: 'Ware House', icon: '📈', badge: 3,hasChildren: true, path: '/Procurement/GetWarehouse' },
     { name: 'Maps', icon: '🗺️', badge: null, path: '/Procurement/maps' },
     { name: 'Pages', icon: '📄', badge: null, hasChildren: true, path: '/Procurement/pages' },
     { name: 'Extra Pages', icon: '➕', badge: null, hasChildren: true, path: '/Procurement/extra-pages' },

@@ -33,7 +33,6 @@ const OrderManagement = () => {
 
   const navigate = useNavigate();
 
-  // Fetch initial data
   useEffect(() => {
     const loadInitialData = async () => {
       try {
@@ -57,7 +56,6 @@ const OrderManagement = () => {
     loadInitialData();
   }, []);
 
-  // Filter orders
   useEffect(() => {
     let result = orders;
     if (statusFilter) {
@@ -66,7 +64,6 @@ const OrderManagement = () => {
     setFilteredOrders(result);
   }, [statusFilter, orders]);
 
-  // Order Status Color Mapping
   const getStatusColor = (status) => {
     const statusColors = {
       placed: 'bg-yellow-100 text-yellow-800',
@@ -77,7 +74,6 @@ const OrderManagement = () => {
     return statusColors[status] || 'bg-gray-100 text-gray-800';
   };
 
-  // Status Icon Mapping
   const getStatusIcon = (status) => {
     const statusIcons = {
       placed: PackageIcon,
@@ -88,7 +84,6 @@ const OrderManagement = () => {
     return statusIcons[status] || PackageIcon;
   };
 
-  // Submit Order Creation
   const handleSubmitOrder = async (e) => {
     e.preventDefault();
     
@@ -96,9 +91,7 @@ const OrderManagement = () => {
       toast.error('Please fill in all required fields');
       return;
     }
-
     setLoading(true);
-     // Store the request data in a variable
      const orderData = {
         supplier: selectedSupplier,
         inventory_item: selectedItem,
@@ -111,7 +104,7 @@ const OrderManagement = () => {
       
       if (response.success) {
         toast.success('Order created successfully');
-        // Reset form and potentially refresh orders
+        window.location.reload();
         setSelectedSupplier('');
         setSelectedItem('');
         setQuantity('');
@@ -128,7 +121,6 @@ const OrderManagement = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-3xl font-bold text-gray-800">Order Management</h1>
         <Link 
@@ -139,7 +131,6 @@ const OrderManagement = () => {
         </Link>
       </div>
 
-      {/* Order Creation Form */}
       <div className="max-w-3xl mx-auto bg-white shadow-xl rounded-lg border border-gray-100 p-8 mb-8">
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800">Create New Order</h2>
@@ -235,7 +226,6 @@ const OrderManagement = () => {
         </form>
       </div>
 
-      {/* Order List */}
       <div className="bg-white shadow-md rounded-lg overflow-hidden">
         <div className="p-4 bg-gray-50 border-b border-gray-200 flex items-center space-x-4">
           <h3 className="text-xl font-semibold text-gray-800">Recent Orders</h3>
@@ -269,8 +259,8 @@ const OrderManagement = () => {
               return (
                 <tr key={order.id} className="border-b hover:bg-gray-50">
                   <td className="px-4 py-3">{order.id}</td>
-                  <td className="px-4 py-3">{order.supplier.name}</td>
-                  <td className="px-4 py-3">{order.inventory_item.name}</td>
+                  <td className="px-4 py-3">{order.supplier_details?.name || "No Supplier"}</td>
+                  <td className="px-4 py-3">{order.inventory_details?.name || "No Inventory Item"}</td>
                   <td className="px-4 py-3 text-center">{order.quantity_ordered}</td>
                   <td className="px-4 py-3 text-center">
                     <span className={`

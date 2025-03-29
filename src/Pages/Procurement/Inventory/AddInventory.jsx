@@ -58,9 +58,8 @@ const InventoryRegister = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, quantity, warehouse } = formData;
-    
-    // Validation
+    const { name, quantity, WareHouse } = formData;
+
     if (!name) {
       toast.error('Item Name is required!');
       return;

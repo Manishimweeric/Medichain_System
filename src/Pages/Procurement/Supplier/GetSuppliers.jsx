@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchSuppliers, deleteSupplier } from '../../../api';
+import { fetchUsers, deleteSupplier } from '../../../api';
 import { Link, useNavigate } from 'react-router-dom'; 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -15,17 +15,18 @@ const SupplierList = () => {
 
   useEffect(() => {
     const getSuppliers = async () => {
-      const result = await fetchSuppliers();
+      const result = await fetchUsers();
       if (result && result.data) {
-        setSuppliers(result.data);
-        setFilteredSuppliers(result.data); // Set filtered suppliers initially
+        const filteredData = result.data.filter(supplier => supplier.role !== "procurement");
+        setSuppliers(filteredData);
+        setFilteredSuppliers(filteredData); // Set filtered suppliers initially
       } else {
         toast.error(result.detail || 'Error fetching suppliers');
       }
     };
     getSuppliers();
   }, []);
-
+  
   // Handle the search/filter by name
   const handleSearchChange = (e) => {
     const term = e.target.value.toLowerCase();
@@ -63,12 +64,12 @@ const SupplierList = () => {
   return (
     <div className="container p-6 bg-gray-100 min-h-screen">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Suppliers</h1>
+        <h1 className="text-2xl font-bold">Users Management</h1>
         <Link 
           to="/Procurement/addSupplier" 
           className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 inline-block"
         >
-          Add New Supplier
+          Add New User
         </Link>
       </div>
 

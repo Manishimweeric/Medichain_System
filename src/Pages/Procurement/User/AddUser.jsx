@@ -43,7 +43,7 @@ const UserRegister = () => {
           password: '',
           role: 'warehouse',
         });
-        window.location.reload();
+        
       } else {
         toast.error(message);
       }

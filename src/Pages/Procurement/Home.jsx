@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchSuppliers,fetchUsers } from '../../api';
+import {fetchUsers,fetchOrders } from '../../api';
 import { FaUserCircle } from 'react-icons/fa';
 
 // Simple custom chart components instead of using recharts
@@ -44,13 +44,18 @@ const SimpleLineChart = ({ data }) => {
 const Dashboard = () => {
     const [supplierCount, setSupplierCount] = useState(0);
     const [usersCount, setUsersCount] = useState(0);
+    const [ordersCount, setOrdersCount] = useState(0);
   
     useEffect(() => {
       const getSuppliers = async () => {
-        const Supplierresult = await fetchSuppliers();  
+        const Supplierresult = await fetchUsers();  
+        const filteredData = Supplierresult.data.filter(supplier => supplier.role === "supplier");
+   
         const Usersresult = await fetchUsers();     
-          setSupplierCount(Supplierresult.data.length); 
+        const Ordersresult = await fetchOrders();
+          setSupplierCount(filteredData.length); 
           setUsersCount(Usersresult.data.length); 
+          setOrdersCount(Ordersresult.data.length);  
         
       };
       getSuppliers();
@@ -90,21 +95,6 @@ const Dashboard = () => {
     { id: 3, name: 'Spillnotdavid', email: 'spillnotdavid@dummy.com', products: 201, startDate: '12/11/2003', avatar: '/api/placeholder/32/32' },
   ];
 
-  const [activeMenuItem, setActiveMenuItem] = useState('Dashboard');
-
-  const menuItems = [
-    { name: 'Dashboard', icon: 'grid-2x2', badge: null },
-    { name: 'UI Elements', icon: 'layout', badge: 14 }, 
-    { name: 'Components', icon: 'puzzle', badge: null, hasChildren: true },
-    { name: 'Typography', icon: 'type', badge: null },
-    { name: 'Forms', icon: 'clipboard', badge: null, hasChildren: true },
-    { name: 'Tables', icon: 'table', badge: null, hasChildren: true },
-    { name: 'Charts', icon: 'bar-chart-2', badge: 3 },
-    { name: 'Maps', icon: 'map', badge: null },
-    { name: 'Pages', icon: 'file', badge: null, hasChildren: true },
-    { name: 'Extra Pages', icon: 'file-plus', badge: null, hasChildren: true },
-    { name: 'Multi Level', icon: 'layers', badge: null, hasChildren: true },
-  ];
 
   return (
     <div>
@@ -144,23 +134,21 @@ const Dashboard = () => {
               </div>
               <p className="text-gray-500 text-sm">Total users</p>
             </div>
-            
             <div className="bg-white rounded-md p-6 border border-gray-200">
               <div className="flex items-center justify-between mb-4">
-                <span className="text-red-400 text-2xl">325</span>
-                <span className="text-red-400">
+                <span className="text-yellow-600 text-2xl">{ordersCount}</span>
+                <span className="text-yellow-600">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                   </svg>
                 </span>
               </div>
-              <p className="text-gray-500 text-sm">Total visits</p>
+              <p className="text-gray-500 text-sm">Total Orders</p>
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            
             {/* Total Revenue Chart */}
             <div className="bg-white rounded-md p-6 border border-gray-200">
               <h2 className="text-lg font-medium mb-6">Total Revenue</h2>

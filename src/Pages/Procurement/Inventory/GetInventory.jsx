@@ -201,6 +201,7 @@ const InventoryList = () => {
                 <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
                 <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
                 <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Reorder Threshold</th>
+                <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Ware House</th>
                 <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Expiration Date</th>
                 <th className="px-4 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">Replenish</th>
               </tr>
@@ -220,8 +221,11 @@ const InventoryList = () => {
                       <div className="text-sm font-medium text-gray-900">{item.name}</div>
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500">{item.description || 'N/A'}</div>
+                      <div className="text-sm text-gray-500">
+                        {item.description ? (item.description.length > 20 ? item.description.slice(0, 10) + '...' : item.description) : 'N/A'}
+                      </div>
                     </td>
+
                     <td className="px-4 py-4 whitespace-nowrap text-center">
                       <span className={`
                         px-2 inline-flex text-xs leading-5 font-semibold rounded-full
@@ -234,6 +238,9 @@ const InventoryList = () => {
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-500">
                       {item.reorder_threshold}
+                    </td>
+                    <td className="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-500">
+                      {item.WareHouse_details.name}
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap text-center text-sm text-gray-500">
                       {item.expiration_date || 'N/A'}

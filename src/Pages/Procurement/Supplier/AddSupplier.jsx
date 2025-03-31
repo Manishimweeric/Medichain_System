@@ -1,5 +1,5 @@
 import React, { useState,useEffect } from 'react';
-import { registerSupplier } from '../../../api';
+import { registerUser } from '../../../api';
 import { Link,useNavigate  } from 'react-router-dom'; 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,6 +12,8 @@ const SupplierRegister = () => {
     phone: '',
     address: '',
     rating: 0.0,
+    password: '',
+    role: '',
   });
 
   const [error, setError] = useState('');
@@ -30,21 +32,26 @@ const SupplierRegister = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { name, email, phone, address } = formData;
+    const { email, password, role, userType, name, phone, address } = formData;
+
+
+    if (!email || !password || !role) {
+      toast.error('All fields are required!');
+      return;
+    }
 
     if (!name || !email || !phone || !address) {
-        toast.error('All fields marked with * are required!');
+      toast.error('All fields marked with * are required!');
       return;
     }
 
     setLoading(true);
     try {
         
-      const { success, message } = await registerSupplier(formData);
+      const { success, message } = await registerUser(formData);
 
       if (success) {
         toast.success(message);
-        window.location.reload();
         setFormData({
           name: '',
           contact_person: '',
@@ -79,8 +86,8 @@ const SupplierRegister = () => {
       </div>
     <div className="max-w-3xl mx-auto bg-white p-8 shadow-xl rounded-lg border border-gray-100">    
       <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold text-gray-800">Supplier Registration</h2>
-        <p className="text-gray-600 mt-2">Add a new supplier to your inventory management system</p>
+        <h2 className="text-3xl font-bold text-gray-800">User Registration</h2>
+        <p className="text-gray-600 mt-2">Add a new User to your inventory management system</p>
       </div>
 
       {error && (
@@ -173,6 +180,39 @@ const SupplierRegister = () => {
               required
             />
           </div>
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">
+              Password <span className="text-red-500">*</span>
+            </label>
+            <input
+              type="password"
+              id="password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+              className="mt-1 block w-full px-4 py-3 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition duration-150"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700">
+              Role <span className="text-red-500">*</span>
+            </label>
+            <select
+              id="role"
+              name="role"
+              value={formData.role}
+              onChange={handleChange}
+              className="mt-1 block w-full px-4 py-3 rounded-md border border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50 transition duration-150"
+              required
+            >
+              <option >Select the Role</option>
+              <option value="procurement">Procurement Officer</option>
+              <option value="warehouse">Warehouse Manager</option>
+              <option value="supplier">Supplier</option>
+              <option value="healthcare">Health Care</option>
+            </select>
+          </div>
         </div>
 
         <div>
@@ -233,7 +273,7 @@ const SupplierRegister = () => {
                 Processing...
               </>
             ) : (
-              'Register Supplier'
+              'Register User'
             )}
           </button>
         </div>

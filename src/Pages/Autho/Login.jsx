@@ -27,22 +27,27 @@ const LoginPage = () => {
     
     setIsLoading(true);
     try {
-      const response = await loginUser(loginData);    
-    
+      const response = await loginUser(loginData); 
+      localStorage.setItem('role', response.data.user.role);
+      localStorage.setItem('user_id', response.data.user.id);
       if (response.data) {
         if (response.data.user.role) {
           localStorage.setItem('access_token', response.data.access_token);
           localStorage.setItem('refresh_token', response.data.refresh_token);
+          
           toast.success('Login successful!');  
           switch (response.data.user.role) {
-            case 'procurement':
+            case 'Procurement':
               navigate('/Procurement/home');
               break;
             case 'warehouse':
-              navigate('/warehouse-dashboard');
+              navigate('/Procurement/home');
+              break;
+            case 'Healthcare':  
+              navigate('/Procurement/home');
               break;
             case 'supplier':  
-              navigate('/supplier-dashboard');
+              navigate('/Procurement/home');
               break;
             default:
               toast.error('Unknown role, redirecting to default page.');

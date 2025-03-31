@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { 
-  fetchSuppliers, 
+  fetchUsers, 
   fetchInventory, 
-  createOrder, 
   fetchOrders,
   approveOrder,
-  sendFeedback 
+  sendFeedback,
+  fetchWarehouses
 } from '../../../api';
 import { 
   PackageIcon, 
@@ -26,7 +26,6 @@ const OrderManagement = () => {
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [statusFilter, setStatusFilter] = useState('');
-
   const [isApprovalModalOpen, setIsApprovalModalOpen] = useState(false);
   const [isFeedbackModalOpen, setIsFeedbackModalOpen] = useState(false);
   const [selectedOrderForApproval, setSelectedOrderForApproval] = useState(null);
@@ -35,31 +34,59 @@ const OrderManagement = () => {
   const [selectedWarehouse, setSelectedWarehouse] = useState('');
   const [ordersCount, setOrdersCount] = useState(0);
   const navigate = useNavigate();
+  const [warehouses, setWarehouses] = useState([]);
+  const [userid, setUserId] = useState('');
+
+
+  useEffect(() => {
+    const getUser_id = async () => {
+      const user = localStorage.getItem('user_id');
+        setUserId(user);
+    };
+    getUser_id();
+},[]);
+
+  const fetchOrdersData = async () => {
+    try {
+      const ordersResponse = await fetchOrders();
+      if (ordersResponse.data) {
+        setOrders(ordersResponse.data);
+        setFilteredOrders(ordersResponse.data);
+        setOrdersCount(ordersResponse.data.length); 
+      }
+    } catch (error) {
+      toast.error('Failed to fetch orders');
+    }
+  };
+  
 
   useEffect(() => {
     const loadInitialData = async () => {
       try {
-        const [suppliersResponse, inventoryResponse, ordersResponse] = await Promise.all([
-          fetchSuppliers(),
+        const [suppliersResponse, inventoryResponse, warehousesResponse] = await Promise.all([
+          fetchUsers(),
           fetchInventory(),
-          fetchOrders()
+          fetchWarehouses()
         ]);
-
-        if (suppliersResponse.data) setSuppliers(suppliersResponse.data);
-        if (inventoryResponse.data) setInventoryItems(inventoryResponse.data);
-        if (ordersResponse.data) {
-          setOrders(ordersResponse.data);
-          setFilteredOrders(ordersResponse.data);
+  
+        if (suppliersResponse.data) {
+          const filteredSuppliers = suppliersResponse.data.filter(supplier => supplier.role !== "Procurement");
+          setSuppliers(filteredSuppliers);
         }
-
-        setOrdersCount(orders.length);
+        
+        if (inventoryResponse.data) setInventoryItems(inventoryResponse.data);
+        if (warehousesResponse.data) setWarehouses(warehousesResponse.data);
+  
+        // Call the function to fetch orders
+        await fetchOrdersData();
       } catch (error) {
         toast.error('Failed to load initial data');
       }
     };
-
+  
     loadInitialData();
   }, []);
+  
 
   useEffect(() => {
     let result = orders;
@@ -73,12 +100,14 @@ const OrderManagement = () => {
     const statusColors = {
       placed: 'bg-yellow-100 text-yellow-800',
       shipped: 'bg-blue-100 text-blue-800',
-      delivered: 'bg-green-100 text-green-800',
+      accepted: 'bg-green-100 text-green-800',
       canceled: 'bg-red-100 text-red-800',
+      approved: 'bg-blue-100 text-blue-800', // Corrected this line
       pending_approval: 'bg-orange-100 text-orange-800'
     };
-    return statusColors[status] || 'bg-gray-100 text-gray-800';
+    return statusColors[status] || 'bg-gray-100 text-gray-800'; // Default fallback color
   };
+  
 
   const getStatusIcon = (status) => {
     const statusIcons = {
@@ -109,22 +138,24 @@ const OrderManagement = () => {
 
     try {
       const approvalData = {
-        orderId: selectedOrderForApproval.id,
         supplier: selectedSupplier,
-        warehouse: selectedWarehouse
+        WareHouse: selectedWarehouse,
+        status: 'approved',
+        approved_by: userid
       };
+      console.log(approvalData);
 
-      const response = await approveOrder(approvalData);
+      const response = await approveOrder(approvalData,selectedOrderForApproval.id);
 
       if (response.success) {
         toast.success('Order approved successfully');
         const updatedOrders = orders.map(order => 
           order.id === selectedOrderForApproval.id 
-            ? { ...order, status: 'shipped' } 
+            ? { ...order, status: 'Approved' } 
             : order
         );
         setOrders(updatedOrders);
-
+        await fetchOrdersData();
         setIsApprovalModalOpen(false);
         setSelectedSupplier('');
         setSelectedWarehouse('');
@@ -137,24 +168,24 @@ const OrderManagement = () => {
     }
   };
 
+
+
   const handleSendFeedback = async () => {
     if (!message || !selectedWarehouse) {
       toast.error('Please write a message and select a warehouse');
       return;
     }
-
     try {
       const feedbackData = {
-        orderId: selectedOrderForApproval.id,
         message: message,
-        warehouse: selectedWarehouse
+        WareHouse: selectedWarehouse,
+        status: 'approved'
       };
-
-      const response = await sendFeedback(feedbackData);
-
+      const response = await approveOrder(feedbackData,selectedOrderForApproval.id);
       if (response.success) {
         toast.success('Feedback sent successfully');
         setIsFeedbackModalOpen(false);
+        await fetchOrdersData();
         setMessage('');
         setSelectedWarehouse('');
         setSelectedOrderForApproval(null);
@@ -177,7 +208,6 @@ const OrderManagement = () => {
           to="/Procurement/addOrder" 
           className="flex items-center px-3 py-1 border border-blue-600 text-blue-600 rounded-md hover:bg-blue-600 hover:text-white transition-colors"
           >
-          
          Total Order : {ordersCount} items
         </Link>
       </div>
@@ -201,7 +231,7 @@ const OrderManagement = () => {
         <table className="w-full">
           <thead className="bg-gray-100">
             <tr>
-              {['Order #', 'Supplier', 'Item', 'Quantity', 'Status', 'Estimated Delivery', 'Actions'].map((header) => (
+              {['Order #', 'Supplier', 'Item', 'Quantity', 'Status','Ware House', 'Estimated Delivery', 'Actions'].map((header) => (
                 <th 
                   key={header} 
                   className="px-4 py-3  text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -229,12 +259,13 @@ const OrderManagement = () => {
                       {order.status}
                     </span>
                   </td>
+                  <td className="px-4 py-3 text-center">{order.WareHouse_details?.name|| "No Ware House" }</td>
+
                   <td className="px-4 py-3 text-center">
                     {new Date(order.estimated_delivery).toLocaleDateString() ||  "No Delivered Date "}
                   </td>
                   <td className="px-4 py-3  space-x-2 w-80">
-                    {order.status === 'placed' && (
-                      <>
+                   
                     <div className="flex text-center">
                         <button 
                         onClick={() => openApprovalModal(order)}
@@ -252,8 +283,7 @@ const OrderManagement = () => {
                         Send Feedback
                         </button>
                         </div>
-                      </>
-                    )}
+                      
                   </td>
                 </tr>
               );
@@ -268,7 +298,6 @@ const OrderManagement = () => {
         )}
       </div>
 
-      {/* Approval Modal */}
       {isApprovalModalOpen && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md">
@@ -314,16 +343,19 @@ const OrderManagement = () => {
                   Select Warehouse
                 </label>
                 <select
-                  id="warehouse-select"
-                  value={selectedWarehouse}
-                  onChange={(e) => setSelectedWarehouse(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="">Choose a warehouse</option>
-                  <option value="warehouse1">Main Warehouse</option>
-                  <option value="warehouse2">North Warehouse</option>
-                  <option value="warehouse3">South Warehouse</option>
-                </select>
+                    id="warehouse-select"
+                    value={selectedWarehouse}
+                    onChange={(e) => setSelectedWarehouse(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Choose a warehouse</option>
+                    {warehouses.map((warehouse) => (
+                      <option key={warehouse.id} value={warehouse.id}>
+                        {warehouse.name} - {warehouse.location}
+                      </option>
+                    ))}
+                  </select>
+
               </div>
             </div>
 
@@ -385,16 +417,18 @@ const OrderManagement = () => {
                   Select Warehouse
                 </label>
                 <select
-                  id="warehouse-select"
-                  value={selectedWarehouse}
-                  onChange={(e) => setSelectedWarehouse(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500"
-                >
-                  <option value="">Choose a warehouse</option>
-                  <option value="warehouse1">Main Warehouse</option>
-                  <option value="warehouse2">North Warehouse</option>
-                  <option value="warehouse3">South Warehouse</option>
-                </select>
+                    id="warehouse-select"
+                    value={selectedWarehouse}
+                    onChange={(e) => setSelectedWarehouse(e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
+                  >
+                    <option value="">Choose a warehouse</option>
+                    {warehouses.map((warehouse) => (
+                      <option key={warehouse.id} value={warehouse.id}>
+                        {warehouse.name} - {warehouse.location}
+                      </option>
+                    ))}
+                  </select>
               </div>
             </div>
 

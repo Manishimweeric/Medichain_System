@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import { 
-  fetchSuppliers, 
+  fetchUsers, 
   fetchInventory, 
   createOrder, 
   fetchOrders 
@@ -20,13 +20,10 @@ const OrderManagement = () => {
   // State for Order Creation
   const [suppliers, setSuppliers] = useState([]);
   const [inventoryItems, setInventoryItems] = useState([]);
-  const [selectedSupplier, setSelectedSupplier] = useState('');
   const [selectedItem, setSelectedItem] = useState('');
   const [quantity, setQuantity] = useState('');
-  const [estimatedDelivery, setEstimatedDelivery] = useState('');
+  const [userid, setUserId] = useState('');
   const [loading, setLoading] = useState(false);
-
-  // State for Order Listing
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
   const [statusFilter, setStatusFilter] = useState('');
@@ -34,10 +31,17 @@ const OrderManagement = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    const getUserRole = async () => {
+      const user = localStorage.getItem('user_id');
+        setUserId(user || '');
+    };
+    getUserRole();
+},[]);
+  useEffect(() => {
     const loadInitialData = async () => {
       try {
         const [suppliersResponse, inventoryResponse, ordersResponse] = await Promise.all([
-          fetchSuppliers(),
+          fetchUsers(),
           fetchInventory(),
           fetchOrders()
         ]);
@@ -87,16 +91,16 @@ const OrderManagement = () => {
   const handleSubmitOrder = async (e) => {
     e.preventDefault();
     
-    if (!selectedSupplier || !selectedItem || !quantity || !estimatedDelivery) {
+    if (!selectedItem || !quantity ) {
       toast.error('Please fill in all required fields');
       return;
     }
     setLoading(true);
+    console.log("User id is "+userid)
      const orderData = {
-        supplier: selectedSupplier,
         inventory_item: selectedItem,
         quantity_ordered: parseInt(quantity),
-        estimated_delivery: estimatedDelivery
+        Send_by: userid
     };
 
     try {
@@ -104,16 +108,13 @@ const OrderManagement = () => {
       
       if (response.success) {
         toast.success('Order created successfully');
-        window.location.reload();
         setSelectedSupplier('');
         setSelectedItem('');
         setQuantity('');
         setEstimatedDelivery('');
-      } else {
-        toast.error(response.message || 'Failed to create order');
-      }
+      } 
     } catch (error) {
-      toast.error('An unexpected error occurred');
+      
     } finally {
       setLoading(false);
     }
@@ -139,25 +140,7 @@ const OrderManagement = () => {
 
         <form onSubmit={handleSubmitOrder} className="space-y-6">
           <div className="grid md:grid-cols-2 gap-6">
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Supplier
-              </label>
-              <select
-                value={selectedSupplier}
-                onChange={(e) => setSelectedSupplier(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                required
-              >
-                <option value="">Select Supplier</option>
-                {suppliers.map((supplier) => (
-                  <option key={supplier.id} value={supplier.id}>
-                    {supplier.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
+           
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Inventory Item
@@ -171,14 +154,11 @@ const OrderManagement = () => {
                 <option value="">Select Item</option>
                 {inventoryItems.map((item) => (
                   <option key={item.id} value={item.id}>
-                    {item.name} (Current Stock: {item.quantity})
+                    {item.name}
                   </option>
                 ))}
               </select>
             </div>
-          </div>
-
-          <div className="grid md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Quantity
@@ -193,18 +173,7 @@ const OrderManagement = () => {
               />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                Estimated Delivery Date
-              </label>
-              <input
-                type="date"
-                value={estimatedDelivery}
-                onChange={(e) => setEstimatedDelivery(e.target.value)}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-                required
-              />
-            </div>
+            
           </div>
 
           <div className="flex justify-end space-x-4 mt-6">

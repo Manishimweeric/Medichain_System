@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, Outlet } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
-import { fetchSuppliers, fetchUsers,logoutUser,fetchInventory,fetchProcurementRequests,fetchOrders } from '../../api';
+import { fetchUsers,logoutUser,fetchInventory,fetchProcurementRequests,fetchOrders } from '../../api';
 import { FaUserCircle } from 'react-icons/fa';
 
 
@@ -28,11 +28,9 @@ const Dashboard = () => {
     }
     
   };
-  
-
   useEffect(() => {
     const getSuppliers = async () => {
-      const Supplierresult = await fetchSuppliers();  
+      const Supplierresult = await fetchUsers();  
       const Usersresult = await fetchUsers();  
       const Inventoryresult = await fetchInventory();  
       const ProcurementRequestsresult = await fetchProcurementRequests(); 
@@ -47,13 +45,12 @@ const Dashboard = () => {
   }, []);
   const menuItems = [
     { name: 'Dashboard', icon: '🏠', badge: null, path: '/Procurement/home' },
-    { name: 'Supplier', icon: '🛠️', badge: supplierCount, path: '/Procurement/GetSupplier' },
-    { name: 'User', icon: '🧩', badge: usersCount, hasChildren: true, path: '/Procurement/GetUsers' },
+    { name: 'User Manager', icon: '🛠️', badge: supplierCount, path: '/Procurement/GetSupplier' },
     { name: 'Inventory', icon: '🔤', badge: InventoryCount, path: '/Procurement/GetInventory' },
     { name: 'Warehouse Request', icon: '📝', badge: procurementRequestsCount, hasChildren: true, path: '/Procurement/GetRequest' },
     { name: 'Supplier Order', icon: '📊', badge: ordersCount, hasChildren: true, path: '/Procurement/GetOrder' },
     { name: 'Ware House', icon: '📈', badge: 3,hasChildren: true, path: '/Procurement/GetWarehouse' },
-    { name: 'Maps', icon: '🗺️', badge: null, path: '/Procurement/maps' },
+    { name: 'Orders', icon: '🗺️', badge: null, path: '/Procurement/Orders' },
     { name: 'Pages', icon: '📄', badge: null, hasChildren: true, path: '/Procurement/pages' },
     { name: 'Extra Pages', icon: '➕', badge: null, hasChildren: true, path: '/Procurement/extra-pages' },
     { name: 'Multi Level', icon: '🔗', badge: null, hasChildren: true, path: '/Procurement/multi-level' },
@@ -173,8 +170,8 @@ const Dashboard = () => {
 
           {/* Footer */}
           <footer className="mt-6 py-4 px-6 flex justify-between items-center text-xs text-gray-500">
-            <div>Simple Admin • Copyright © 2016</div>
-            <div>Project Completed: 95%</div>
+            <div>Simple Admin • Copyright © 2025</div>
+            <div>Project Completed: 70%</div>
           </footer>
         </main>
       </div>

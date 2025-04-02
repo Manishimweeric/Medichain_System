@@ -70,7 +70,7 @@ const OrderManagement = () => {
         ]);
   
         if (suppliersResponse.data) {
-          const filteredSuppliers = suppliersResponse.data.filter(supplier => supplier.role !== "Procurement");
+          const filteredSuppliers = suppliersResponse.data.filter(supplier => supplier.role !== "Procurement" && supplier.role === "Supplier");
           setSuppliers(filteredSuppliers);
         }
         
@@ -170,8 +170,8 @@ const OrderManagement = () => {
 
 
 
-  const handleSendFeedback = async () => {
-    if (!message || !selectedWarehouse) {
+    const handleSendFeedback = async () => {
+      if (!message || !selectedWarehouse) {
       toast.error('Please write a message and select a warehouse');
       return;
     }
@@ -222,16 +222,15 @@ const OrderManagement = () => {
           >
             <option value="">All Statuses</option>
             <option value="placed">Placed</option>
-            <option value="shipped">Shipped</option>
-            <option value="delivered">Delivered</option>
-            <option value="canceled">Canceled</option>
+            <option value="approved">Approved</option>
+            <option value="accepted">Accepted</option>
           </select>
         </div>
 
         <table className="w-full">
           <thead className="bg-gray-100">
             <tr>
-              {['Order #', 'Supplier', 'Item', 'Quantity', 'Status','Ware House', 'Estimated Delivery', 'Actions'].map((header) => (
+              {['Order #','Helth Care', 'Item', 'Quantity','Supplier','Ware House', 'Estimated Delivery','Status','Actions'].map((header) => (
                 <th 
                   key={header} 
                   className="px-4 py-3  text-center text-xs font-medium text-gray-500 uppercase tracking-wider"
@@ -247,9 +246,16 @@ const OrderManagement = () => {
               return (
                 <tr key={order.id} className="border-b hover:bg-gray-50 text-sm">
                   <td className="px-4 py-3 text-center">{order.id}</td>
-                  <td className="px-4 py-3 text-center">{order.supplier_details?.name || "No Supplier"}</td>
+            
+                  <td className="px-4 py-3 text-center">{order.sender_by_details?.name || "No User"}</td>
                   <td className="px-4 py-3 text-center">{order.inventory_details?.name || "No Inventory Item"}</td>
                   <td className="px-4 py-3 text-center">{order.quantity_ordered}</td>
+                  <td className="px-4 py-3 text-center">{order.supplier_details?.name || "No Supplier"}</td>
+                  <td className="px-4 py-3 text-center">{order.WareHouse_details?.name|| "No Ware House" }</td>
+
+                  <td className="px-4 py-3 text-center">
+                    {order.estimated_delivery ? new Date(order.estimated_delivery).toLocaleDateString() : "Not set"}
+                  </td>
                   <td className="px-4 py-3 text-center">
                     <span className={`
                       inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
@@ -258,11 +264,6 @@ const OrderManagement = () => {
                       <StatusIcon className="mr-1.5 h-3.5 w-3.5" />
                       {order.status}
                     </span>
-                  </td>
-                  <td className="px-4 py-3 text-center">{order.WareHouse_details?.name|| "No Ware House" }</td>
-
-                  <td className="px-4 py-3 text-center">
-                    {new Date(order.estimated_delivery).toLocaleDateString() ||  "No Delivered Date "}
                   </td>
                   <td className="px-4 py-3  space-x-2 w-80">
                    

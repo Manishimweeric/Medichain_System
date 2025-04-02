@@ -1,224 +1,451 @@
 import React, { useEffect, useState } from "react";
-import {fetchUsers,fetchOrders } from '../../api';
-import { FaUserCircle } from 'react-icons/fa';
+import { fetchUsers, fetchOrders, fetchInventory } from '../../api';
+import { 
+  LineChart, 
+  Line, 
+  BarChart, 
+  Bar, 
+  XAxis, 
+  YAxis, 
+  CartesianGrid, 
+  Tooltip, 
+  Legend,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell
+} from 'recharts';
 
-// Simple custom chart components instead of using recharts
-const SimpleBarChart = ({ data }) => {
-  const maxValue = Math.max(...data.map(item => item.seriesA + item.seriesB));
-  
-  return (
-    <div className="h-64 flex items-end space-x-2">
-      {data.map((item, index) => (
-        <div key={index} className="flex flex-col items-center flex-1">
-          <div className="w-full flex flex-col-reverse">
-            <div 
-              className="w-full bg-blue-500" 
-              style={{ height: `${(item.seriesA / maxValue) * 180}px` }} 
-            />
-            <div 
-              className="w-full bg-gray-200" 
-              style={{ height: `${(item.seriesB / maxValue) * 180}px` }} 
-            />
-          </div>
-          <div className="text-xs mt-2 text-gray-600">{item.year}</div>
-        </div>
-      ))}
-    </div>
-  );
-};
-
-const SimpleLineChart = ({ data }) => {
-  return (
-    <div className="h-64 relative border-b border-l border-gray-200">
-      <div className="absolute inset-0 flex items-center justify-center text-gray-400">
-        Line chart visualization (simplified version)
-      </div>
-      <div className="absolute bottom-0 left-0 right-0 flex justify-between px-2">
-        {data.map((item, index) => (
-          <div key={index} className="text-xs text-gray-600">{item.year}</div>
-        ))}
-      </div>
-    </div>
-  );
-};
 const Dashboard = () => {
-    const [supplierCount, setSupplierCount] = useState(0);
-    const [usersCount, setUsersCount] = useState(0);
-    const [ordersCount, setOrdersCount] = useState(0);
+  // State management
+  const [loading, setLoading] = useState(true);
+  const [supplierCount, setSupplierCount] = useState(0);
+  const [usersCount, setUsersCount] = useState(0);
+  const [ordersCount, setOrdersCount] = useState(0);
+  const [inventoryCount, setInventoryCount] = useState(0);
+  const [lowStockCount, setLowStockCount] = useState(0);
+  const [ordersByStatus, setOrdersByStatus] = useState([]);
+  const [monthlyOrderData, setMonthlyOrderData] = useState([]);
+  const [recentOrders, setRecentOrders] = useState([]);
+  const [topSuppliers, setTopSuppliers] = useState([]);
+  const [inventoryData, setInventoryData] = useState([]);
+
+  // Constants
+  const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#FF6B6B'];
+  const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   
-    useEffect(() => {
-      const getSuppliers = async () => {
-        const Supplierresult = await fetchUsers();  
-        const filteredData = Supplierresult.data.filter(supplier => supplier.role === "supplier");
-   
-        const Usersresult = await fetchUsers();     
-        const Ordersresult = await fetchOrders();
-          setSupplierCount(filteredData.length); 
-          setUsersCount(Usersresult.data.length); 
-          setOrdersCount(Ordersresult.data.length);  
+  useEffect(() => {
+    const fetchDashboardData = async () => {
+      setLoading(true);
+      try {
+        // Fetch all required data
+        const [usersResult, ordersResult, inventoryResult] = await Promise.all([
+          fetchUsers(),
+          fetchOrders(),
+          fetchInventory()
+        ]);
+
+        // Process users data
+        const suppliers = usersResult.data.filter(user => user.role === "Supplier");
+        setSupplierCount(suppliers.length);
+        setUsersCount(usersResult.data.length);
+
+        // Process orders data
+        setOrdersCount(ordersResult.data.length);
         
-      };
-      getSuppliers();
-    }, []);
-  
-  const totalRevenueData = [
-    { year: '2005', seriesA: 75, seriesB: 225 },
-    { year: '2006', seriesA: 100, seriesB: 150 },
-    { year: '2007', seriesA: 90, seriesB: 180 },
-    { year: '2008', seriesA: 95, seriesB: 160 },
-    { year: '2009', seriesA: 100, seriesB: 170 },
-    { year: '2010', seriesA: 85, seriesB: 150 },
-    { year: '2011', seriesA: 80, seriesB: 145 },
-    { year: '2012', seriesA: 90, seriesB: 140 },
-    { year: '2013', seriesA: 75, seriesB: 145 },
-    { year: '2014', seriesA: 95, seriesB: 175 },
-    { year: '2015', seriesA: 100, seriesB: 185 },
-  ];
+        // Create orders by status chart data
+        const statusCounts = {};
+        ordersResult.data.forEach(order => {
+          statusCounts[order.status] = (statusCounts[order.status] || 0) + 1;
+        });
+        
+        const orderStatusData = Object.keys(statusCounts).map(status => ({
+          name: status.charAt(0).toUpperCase() + status.slice(1),
+          value: statusCounts[status]
+        }));
+        setOrdersByStatus(orderStatusData);
+        
+        // Calculate orders by month (using actual data)
+        const ordersByMonth = Array(12).fill(0).map((_, i) => ({
+          month: MONTHS[i],
+          orders: 0
+        }));
+        
+        ordersResult.data.forEach(order => {
+          const orderDate = new Date(order.order_date);
+          const monthIndex = orderDate.getMonth();
+          ordersByMonth[monthIndex].orders += 1;
+        });
+        
+        // Only include months that have data, up to the current month
+        const currentMonth = new Date().getMonth();
+        const filteredMonthlyData = ordersByMonth.slice(0, currentMonth + 1);
+        setMonthlyOrderData(filteredMonthlyData);
 
-  const salesAnalyticsData = [
-    { year: '2005', mobiles: 25, tablets: 0 },
-    { year: '2006', mobiles: 35, tablets: 15 },
-    { year: '2007', mobiles: 30, tablets: 25 },
-    { year: '2008', mobiles: 40, tablets: 35 },
-    { year: '2009', mobiles: 65, tablets: 40 },
-    { year: '2010', mobiles: 35, tablets: 65 },
-    { year: '2011', mobiles: 50, tablets: 35 },
-    { year: '2012', mobiles: 75, tablets: 25 },
-    { year: '2013', mobiles: 60, tablets: 45 },
-    { year: '2014', mobiles: 70, tablets: 65 },
-    { year: '2015', mobiles: 90, tablets: 75 },
-  ];
+        // Set recent orders (last 5)
+        const sortedOrders = [...ordersResult.data].sort((a, b) => 
+          new Date(b.order_date) - new Date(a.order_date)
+        ).slice(0, 4);
+        setRecentOrders(sortedOrders);
 
-  const contactsData = [
-    { id: 1, name: 'Tomatoes', email: 'tomatoes@dummy.com', products: 356, startDate: '01/11/2003', avatar: '/images/hd3.jpeg' },
-    { id: 2, name: 'Chademgle', email: 'chademgle@dummy.com', products: 568, startDate: '01/11/2003', avatar: '/api/placeholder/32/32' },
-    { id: 3, name: 'Spillnotdavid', email: 'spillnotdavid@dummy.com', products: 201, startDate: '12/11/2003', avatar: '/api/placeholder/32/32' },
-  ];
+        // Process inventory data
+        setInventoryCount(inventoryResult.data.length);
+        
+        // Count inventory items below reorder threshold
+        const lowStock = inventoryResult.data.filter(
+          item => item.quantity <= item.reorder_threshold
+        );
+        setLowStockCount(lowStock.length);
 
+        // Create inventory data for visualization
+        const inventoryChartData = inventoryResult.data
+          .sort((a, b) => b.quantity - a.quantity)
+          .slice(0, 8)
+          .map(item => ({
+            name: item.name.length > 15 ? item.name.substring(0, 15) + '...' : item.name,
+            quantity: item.quantity,
+            threshold: item.reorder_threshold
+          }));
+        setInventoryData(inventoryChartData);
+
+        // Create top suppliers data based on number of orders
+        const supplierOrders = {};
+        ordersResult.data.forEach(order => {
+          if (order.supplier) {
+            supplierOrders[order.supplier] = (supplierOrders[order.supplier] || 0) + 1;
+          }
+        });
+        
+        // Map supplier IDs to names and get top 5
+        const topSuppliersList = Object.entries(supplierOrders)
+          .map(([supplierId, count]) => {
+            const supplier = suppliers.find(s => s.id === parseInt(supplierId));
+            return {
+              id: supplierId,
+              name: supplier ? supplier.name : `Supplier ${supplierId}`,
+              orders: count
+            };
+          })
+          .sort((a, b) => b.orders - a.orders)
+          .slice(0, 4);
+        
+        setTopSuppliers(topSuppliersList);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboardData();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+      </div>
+    );
+  }
 
   return (
-    <div>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-            <div className="bg-white rounded-md p-6 border border-gray-200">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-blue-500 text-2xl">8954</span>
-                <span className="text-blue-500">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-                  </svg>
-                </span>
-              </div>
-              <p className="text-gray-500 text-sm">Lifetime total sales</p>
-            </div>
-            
-            <div className="bg-white rounded-md p-6 border border-gray-200">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-green-500 text-2xl">{supplierCount}</span>
-                <span className="text-green-500">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>  
-                </span>
-              </div>
-              <p className="text-gray-500 text-sm">Total Supplier</p>
-            </div>
-            
-            <div className="bg-white rounded-md p-6 border border-gray-200">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-blue-400 text-2xl">{usersCount}</span>
-                <span className="text-blue-400">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                </span>
-              </div>
-              <p className="text-gray-500 text-sm">Total users</p>
-            </div>
-            <div className="bg-white rounded-md p-6 border border-gray-200">
-              <div className="flex items-center justify-between mb-4">
-                <span className="text-yellow-600 text-2xl">{ordersCount}</span>
-                <span className="text-yellow-600">
-                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                  </svg>
-                </span>
-              </div>
-              <p className="text-gray-500 text-sm">Total Orders</p>
-            </div>
+    <div className="px-4 py-6">
+      <h1 className="text-2xl font-semibold text-gray-800 mb-6">Dashboard</h1>
+      
+      {/* Summary Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+        {/* Total Orders Card */}
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-medium text-gray-500">Total Orders</h2>
+            <span className="p-2 rounded-full bg-blue-50 text-blue-500">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+              </svg>
+            </span>
           </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-            {/* Total Revenue Chart */}
-            <div className="bg-white rounded-md p-6 border border-gray-200">
-              <h2 className="text-lg font-medium mb-6">Total Revenue</h2>
-              <div className="flex justify-center mb-4">
-                <div className="flex items-center mr-6">
-                  <div className="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
-                  <span className="text-sm text-gray-600">Series A</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-3 h-3 rounded-full bg-gray-300 mr-2"></div>
-                  <span className="text-sm text-gray-600">Series B</span>
-                </div>
-              </div>
-              <SimpleBarChart data={totalRevenueData} />
-            </div>
-
-            {/* Sales Analytics Chart */}
-            <div className="bg-white rounded-md p-6 border border-gray-200">
-              <h2 className="text-lg font-medium mb-6">Sales Analytics</h2>
-              <div className="flex justify-center mb-4">
-                <div className="flex items-center mr-6">
-                  <div className="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
-                  <span className="text-sm text-gray-600">Mobiles</span>
-                </div>
-                <div className="flex items-center">
-                  <div className="w-3 h-3 rounded-full bg-teal-500 mr-2"></div>
-                  <span className="text-sm text-gray-600">Tablets</span>
-                </div>
-              </div>
-              <SimpleLineChart data={salesAnalyticsData} />
-            </div>
+          <div className="flex items-baseline">
+            <span className="text-2xl font-bold text-gray-900">{ordersCount}</span>
+            {monthlyOrderData.length >= 2 && (
+              <span className="ml-2 text-xs font-medium text-green-500">
+                {(() => {
+                  const currentMonth = monthlyOrderData[monthlyOrderData.length - 1];
+                  const prevMonth = monthlyOrderData[monthlyOrderData.length - 2];
+                  if (prevMonth.orders === 0) return "+100% from last month";
+                  const percentChange = Math.round((currentMonth.orders - prevMonth.orders) / prevMonth.orders * 100);
+                  return `${percentChange >= 0 ? '+' : ''}${percentChange}% from last month`;
+                })()}
+              </span>
+            )}
           </div>
+        </div>
 
-          {/* Contacts Table */}
-          <div className="bg-white rounded-md p-6 border border-gray-200">
-            <h2 className="text-lg font-medium mb-6">Contacts</h2>
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead>
-                  <tr>
-                    <th className="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"></th>
-                    <th className="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                    <th className="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
-                    <th className="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Products</th>
-                    <th className="px-4 py-3 bg-gray-50 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Start Date</th>
+        {/* Total Suppliers Card */}
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-medium text-gray-500">Suppliers</h2>
+            <span className="p-2 rounded-full bg-green-50 text-green-500">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+              </svg>
+            </span>
+          </div>
+          <div className="flex items-baseline">
+            <span className="text-2xl font-bold text-gray-900">{supplierCount}</span>
+            <span className="ml-2 text-xs font-medium text-green-500">Active suppliers</span>
+          </div>
+        </div>
+
+        {/* Total Inventory Card */}
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-medium text-gray-500">Inventory Items</h2>
+            <span className="p-2 rounded-full bg-purple-50 text-purple-500">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+              </svg>
+            </span>
+          </div>
+          <div className="flex items-baseline">
+            <span className="text-2xl font-bold text-gray-900">{inventoryCount}</span>
+            <span className="ml-2 text-xs font-medium text-yellow-500">{lowStockCount} low stock</span>
+          </div>
+        </div>
+
+        {/* Total Users Card */}
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-sm font-medium text-gray-500">Total Users</h2>
+            <span className="p-2 rounded-full bg-indigo-50 text-indigo-500">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            </span>
+          </div>
+          <div className="flex items-baseline">
+            <span className="text-2xl font-bold text-gray-900">{usersCount}</span>
+            <span className="ml-2 text-xs font-medium text-green-500">Active system users</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Charts Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+        {/* Monthly Orders Chart */}
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <h2 className="text-lg font-medium text-gray-800 mb-6">Monthly Orders</h2>
+          {monthlyOrderData.length > 0 ? (
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={monthlyOrderData}>
+                <CartesianGrid strokeDasharray="3 3" vertical={false} />
+                <XAxis dataKey="month" axisLine={false} tickLine={false} />
+                <YAxis axisLine={false} tickLine={false} />
+                <Tooltip />
+                <Bar dataKey="orders" fill="#4F46E5" radius={[4, 4, 0, 0]} />
+              </BarChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex justify-center items-center h-64 text-gray-400">
+              No order data available for charting
+            </div>
+          )}
+        </div>
+
+        {/* Orders by Status Chart */}
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <h2 className="text-lg font-medium text-gray-800 mb-6">Orders by Status</h2>
+          {ordersByStatus.length > 0 ? (
+            <div className="flex justify-center">
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={ordersByStatus}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    outerRadius={100}
+                    fill="#8884d8"
+                    dataKey="value"
+                    label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                  >
+                    {ordersByStatus.map((entry, index) => (
+                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    ))}
+                  </Pie>
+                  <Tooltip />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          ) : (
+            <div className="flex justify-center items-center h-64 text-gray-400">
+              No status data available for charting
+            </div>
+          )}
+          <div className="flex flex-wrap justify-center mt-4">
+            {ordersByStatus.map((entry, index) => (
+              <div key={`legend-${index}`} className="flex items-center mx-3 mb-2">
+                <div className="w-3 h-3 rounded-full mr-2" style={{ backgroundColor: COLORS[index % COLORS.length] }}></div>
+                <span className="text-sm text-gray-600">{entry.name}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Inventory Status Chart */}
+      <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100 mb-8">
+        <h2 className="text-lg font-medium text-gray-800 mb-6">Inventory Status</h2>
+        {inventoryData.length > 0 ? (
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={inventoryData}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} />
+              <XAxis dataKey="name" axisLine={false} tickLine={false} />
+              <YAxis axisLine={false} tickLine={false} />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="quantity" fill="#4F46E5" name="Current Quantity" />
+              <Bar dataKey="threshold" fill="#EF4444" name="Reorder Threshold" />
+            </BarChart>
+          </ResponsiveContainer>
+        ) : (
+          <div className="flex justify-center items-center h-64 text-gray-400">
+            No inventory data available for charting
+          </div>
+        )}
+      </div>
+
+      {/* Tables Section */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        {/* Recent Orders Table */}
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-lg font-medium text-gray-800">Recent Orders</h2>
+            <a href="/orders" className="text-sm text-blue-600 hover:text-blue-800">View All</a>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Item</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {recentOrders.map((order) => (
+                  <tr key={order.id} className="hover:bg-gray-50">
+                    <td className="px-4 py-4 whitespace-nowrap text-sm font-medium text-gray-900">#{order.id}</td>
+                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {order.inventory_item ? (typeof order.inventory_item === 'object' ? order.inventory_item.name : order.inventory_item) : 'N/A'}
+                    </td>
+                    <td className="px-4 py-4 whitespace-nowrap">
+                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                        ${order.status === 'delivered' ? 'bg-green-100 text-green-800' : 
+                          order.status === 'shipped' ? 'bg-blue-100 text-blue-800' : 
+                            order.status === 'canceled' ? 'bg-red-100 text-red-800' :
+                              'bg-yellow-100 text-yellow-800'}`}>
+                        {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                      </span>
+                    </td>
+                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {new Date(order.order_date).toLocaleDateString()}
+                    </td>
                   </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {contactsData.map((contact) => (
-                    <tr key={contact.id} className="hover:bg-gray-50">
-                      <td className="px-4 py-4 whitespace-nowrap">
-                        <div className="flex items-center">
-                          <div className="flex-shrink-0 h-8 w-8 rounded-full overflow-hidden">
-                            <img src="/images/ppe.jpg" alt={contact.name} className="h-8 w-8" />
-                          </div>
+                ))}
+                {recentOrders.length === 0 && (
+                  <tr>
+                    <td colSpan="4" className="px-4 py-4 text-center text-sm text-gray-500">No orders found</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Top Suppliers */}
+        <div className="bg-white rounded-lg p-6 shadow-sm border border-gray-100">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-lg font-medium text-gray-800">Top Suppliers</h2>
+            <a href="/suppliers" className="text-sm text-blue-600 hover:text-blue-800">View All</a>
+          </div>
+          <div className="overflow-x-auto">
+            <table className="min-w-full">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Supplier</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Orders</th>
+                  <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Rating</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {topSuppliers.map((supplier) => (
+                  <tr key={supplier.id} className="hover:bg-gray-50">
+                    <td className="px-4 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="flex-shrink-0 h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
+                          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                          </svg>
                         </div>
-                      </td>
-                      <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-900">{contact.name}</td>
-                      <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{contact.email}</td>
-                      <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{contact.products}</td>
-                      <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{contact.startDate}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                        <div className="ml-4">
+                          <div className="text-sm font-medium text-gray-900">{supplier.name}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-4 py-4 whitespace-nowrap text-sm text-gray-500">{supplier.orders}</td>
+                    <td className="px-4 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        <div className="flex">
+                          {[...Array(5)].map((_, i) => {
+                            // Use supplier.id to generate a consistent rating
+                            const rating = (parseInt(supplier.id) % 3) + 3; // Will give 3, 4, or 5 stars
+                            return (
+                              <svg 
+                                key={i} 
+                                className={`h-4 w-4 ${i < rating ? 'text-yellow-400' : 'text-gray-300'}`} 
+                                fill="currentColor" 
+                                viewBox="0 0 20 20"
+                              >
+                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                              </svg>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+                {topSuppliers.length === 0 && (
+                  <tr>
+                    <td colSpan="3" className="px-4 py-4 text-center text-sm text-gray-500">No suppliers found</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      
+      {/* Low Stock Alert */}
+      {lowStockCount > 0 && (
+        <div className="bg-red-50 border-l-4 border-red-400 p-4 mb-8 rounded-md">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                <path fillRule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-red-700">
+                <span className="font-medium">Attention needed!</span> {lowStockCount} {lowStockCount === 1 ? 'item is' : 'items are'} below reorder threshold.
+                <a href="/Procurement/getAllInventory" className="font-medium underline ml-1">View inventory</a>
+              </p>
             </div>
           </div>
-
-     </div>
-     
+        </div>
+      )}
+    </div>
   );
 };
 

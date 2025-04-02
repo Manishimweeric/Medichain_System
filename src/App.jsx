@@ -20,6 +20,13 @@ import GetOrder from './Pages/Procurement/Order/GetOrder';
 import AddWarehouse from './Pages/Procurement/Warehouse/AddWarehouse';
 import GetWarehouse from './Pages/Procurement/Warehouse/GetWarehouse';
 import Orders from './Pages/Procurement/Supplier/Orders';
+import GetAllInventory from './Pages/Procurement/Procure/GetAllInventory';
+import WarehouseDashboard from './Pages/Procurement/Inventory/WarehouseInventoryDashboard';
+import InventoryReport from './Pages/Procurement/Inventory/InventoryReport ';
+import HealthOrder from './Pages/Procurement/Healthcare/HealthOrder';
+import OrderDashboard from './Pages/Procurement/Order/OrderDashboard';
+import HealthDashboard from './Pages/Procurement/Healthcare/HealthDashboard';
+import OrderReport from './Pages/Procurement/Healthcare/OrderReport';
 
 function App() {
   const [count, setCount] = useState(0);
@@ -47,6 +54,13 @@ function App() {
           <Route path="addWarehouse" element={<AddWarehouse />} />
           <Route path="GetWarehouse" element={<GetWarehouse />} />
           <Route path="orders" element={<Orders />} />
+          <Route path="getAllInventory" element={<GetAllInventory />} />
+          <Route path="warehouseInventoryDashboard" element={<WarehouseDashboard />} />
+          <Route path="inventoryReport" element={<InventoryReport />} />
+          <Route path="healthOrder" element={<HealthOrder />} />
+          <Route path="orderDashboard" element={<OrderDashboard />} />
+          <Route path="healthDashboard" element={<HealthDashboard />} />
+          <Route path="orderReport" element={<OrderReport />} />
 
       </Route>      
       </Routes>      

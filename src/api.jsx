@@ -149,7 +149,11 @@ export const registerInventory = async (inventoryData) => {
 export const fetchInventory = async () => {
   try {
     const response = await api.get('/inventory/');
-    return response;
+    
+    return{
+      success: true,
+      data: response.data
+    } 
   } catch (error) {
     return { success: false, message: error.response?.data?.detail || 'Error fetching inventory.' };
   }
@@ -195,7 +199,6 @@ export const createProcurementRequest = async (requestData) => {
   }
 };
 
-// Fetch procurement requests
 export const fetchProcurementRequests = async () => {
   try {
     const response = await api.get('/procurement_requests/');

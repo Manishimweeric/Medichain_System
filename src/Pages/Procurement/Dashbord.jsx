@@ -62,6 +62,7 @@ const Dashboard = () => {
     { name: 'Inventory', icon: '🔤', badge: inventoryCount, path: '/Procurement/getAllInventory' },
     { name: 'User Management', icon: '🛠️', badge: supplierCount, path: '/Procurement/GetSupplier' },
     { name: 'Supplier Order', icon: '📊', badge: ordersCount, path: '/Procurement/GetOrder' },
+    { name: 'Order Report  ', icon: '📊', badge: ordersCount, path: '/Procurement/orderReport' },
   ];
 
   const warehouseMenuItems = [
@@ -74,7 +75,6 @@ const Dashboard = () => {
   const healthcareMenuItems = [
     { name: 'Dashboard', icon: '🏠', badge: null, path: '/Procurement/HealthDashboard' },
     { name: 'Order management ', icon: '📊', badge: ordersCount, path: '/Procurement/healthOrder' },
-    { name: 'Order Report  ', icon: '📊', badge: ordersCount, path: '/Procurement/orderReport' },
   ];
 
   const supplierMenuItems = [

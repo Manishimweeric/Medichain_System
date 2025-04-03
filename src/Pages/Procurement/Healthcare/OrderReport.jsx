@@ -253,10 +253,10 @@ const OrderReport = () => {
     return filteredOrders.map(order => ({
       'Order ID': order.id,
       'Status': order.status,
-      'Supplier': suppliers.find(s => s.id === order.supplier)?.name || 'N/A',
-      'Inventory Item': inventoryItems.find(i => i.id === order.inventory_item)?.name || 'N/A',
+      'Supplier': order.supplier_details?.name  || 'N/A',
+      'Inventory Item': order.inventory_details?.name || 'N/A',
       'Quantity': order.quantity_ordered || 0,
-      'Warehouse': warehouses.find(w => w.id === order.warehouse)?.name || 'N/A',
+      'Warehouse':  order.WareHouse_details?.name || 'N/A',
       'Order Date': moment(order.order_date).format('YYYY-MM-DD'),
       'Estimated Delivery': order.estimated_delivery ? moment(order.estimated_delivery).format('YYYY-MM-DD') : 'N/A',
       'Message': order.message || ''
@@ -313,12 +313,11 @@ const OrderReport = () => {
       title: 'Supplier',
       key: 'supplier',
       render: (record) => {
-        const supplier = suppliers.find(s => s.id === record.supplier);
-        return supplier?.name || 'N/A';
+        return record.supplier_details?.name || 'N/A';
       },
       sorter: (a, b) => {
-        const supplierA = suppliers.find(s => s.id === a.supplier)?.name || '';
-        const supplierB = suppliers.find(s => s.id === b.supplier)?.name || '';
+        const supplierA = a.supplier_details?.name || '';
+        const supplierB = b.supplier_details?.name || '';
         return supplierA.localeCompare(supplierB);
       },
     },
@@ -326,8 +325,7 @@ const OrderReport = () => {
       title: 'Item',
       key: 'item',
       render: (record) => {
-        const item = inventoryItems.find(i => i.id === record.inventory_item);
-        return item?.name || 'N/A';
+        return record.inventory_details?.name || 'N/A';
       },
     },
     {
@@ -340,8 +338,7 @@ const OrderReport = () => {
       title: 'Warehouse',
       key: 'warehouse',
       render: (record) => {
-        const warehouse = warehouses.find(w => w.id === record.warehouse);
-        return warehouse?.name || 'N/A';
+        return record.WareHouse_details?.name || 'N/A';
       },
     },
     {
@@ -357,29 +354,8 @@ const OrderReport = () => {
       key: 'estimated_delivery',
       render: (date) => date ? moment(date).format('YYYY-MM-DD') : 'N/A',
     },
-    {
-      title: 'Message',
-      dataIndex: 'message',
-      key: 'message',
-      ellipsis: {
-        showTitle: false,
-      },
-      render: (message) => (
-        <Tooltip placement="topLeft" title={message}>
-          <Text ellipsis>{message || 'N/A'}</Text>
-        </Tooltip>
-      ),
-    },
-    {
-      title: 'Action',
-      key: 'action',
-      render: (_, record) => (
-        <Space size="small">
-          <Button type="link" size="small">View</Button>
-          <Button type="link" size="small">Edit</Button>
-        </Space>
-      ),
-    },
+   
+ 
   ];
 
   // Row selection configuration
